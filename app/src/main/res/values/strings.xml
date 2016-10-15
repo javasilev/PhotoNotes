@@ -1,3 +1,4 @@
 <resources>
-	<string name="app_name">PhotoNotes</string>
+	<string name="app_name">Photo Notes</string>
+	<string name="base_api_url">https://vision.googleapis.com/</string>
 </resources>
