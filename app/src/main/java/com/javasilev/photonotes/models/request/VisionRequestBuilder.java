@@ -51,31 +51,6 @@ public class VisionRequestBuilder {
 		return this;
 	}
 
-	public VisionRequestBuilder addImage(int imgId) {
-		Bitmap bmp = null;
-		try {
-			bmp = Picasso.with(mContext)
-					.load(imgId)
-					.resize(1200, 1200)
-					.onlyScaleDown()
-					.get();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		assert bmp != null;
-		bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-		String imageString = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-		Image image = new Image(imageString, null);
-
-		mRequest.setImage(image);
-
-		return this;
-	}
-
 	public VisionRequestBuilder addFeature(Feature.Type type, int maxResults) {
 		Feature feature = new Feature(type, maxResults);
 

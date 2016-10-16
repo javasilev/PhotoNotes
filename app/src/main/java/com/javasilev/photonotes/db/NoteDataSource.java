@@ -6,6 +6,7 @@ import java.util.List;
 import com.javasilev.photonotes.models.Note;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
 /**
  * Created by Aleksei Vasilev.
@@ -58,7 +59,7 @@ public class NoteDataSource {
 	}
 
 	public List<Note> getAllNotes() {
-		return mRealm.where(Note.class).findAll();
+		return mRealm.where(Note.class).findAllSorted("creationDate", Sort.DESCENDING);
 	}
 
 	public List<Note> findNotes(String searchQuery) {
