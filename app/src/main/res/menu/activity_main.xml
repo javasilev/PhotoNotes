@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/activity_main_menu_all_notes"
+		android:title="@string/all_notes"
+		app:showAsAction="never" />
+
+	<item
+		android:id="@+id/activity_main_menu_prefs"
+		android:title="@string/preferences"
+		app:showAsAction="never"/>
+
+	<item
+		android:id="@+id/activity_main_menu_about"
+		android:title="@string/about"
+		app:showAsAction="never"/>
+</menu>

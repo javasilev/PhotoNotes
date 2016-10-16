@@ -1,4 +1,45 @@
 <resources>
 	<string name="app_name">Photo Notes</string>
 	<string name="base_api_url">https://vision.googleapis.com/</string>
+	<string name="select_option">Select option:</string>
+	<string name="camera">Camera</string>
+	<string name="gallery">Gallery</string>
+	<string name="ok">OK</string>
+	<string name="name">Name:</string>
+	<string name="content">Content:</string>
+	<string name="processing">Processing...</string>
+	<string name="cancel">Cancel</string>
+	<string name="all_notes">All notes</string>
+	<string name="preferences">Preferences</string>
+	<string name="about">About</string>
+	<string name="save">Save</string>
+	<string name="delete">Delete</string>
+	<string name="key_lang">key_lang</string>
+	<string name="lang_summary">Exclude languages based on the Latin alphabet</string>
+
+	<string-array name="lang_entries">
+		<item>Belarusian</item>
+		<item>Russian</item>
+		<item>Serbian</item>
+		<item>Slovak</item>
+		<item>Tajik</item>
+		<item>Ukrainian</item>
+		<item>Uzbek</item>
+	</string-array>
+
+	<string-array name="lang_defaults">
+		<item>ru</item>
+		<item>sr</item>
+		<item>uz</item>
+	</string-array>
+
+	<string-array name="lang_values">
+		<item>be</item>
+		<item>ru</item>
+		<item>sr</item>
+		<item>sk</item>
+		<item>tg</item>
+		<item>uk</item>
+		<item>uz</item>
+	</string-array>
 </resources>

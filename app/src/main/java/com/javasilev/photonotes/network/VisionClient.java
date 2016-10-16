@@ -6,8 +6,8 @@ import com.javasilev.photonotes.urls.VisionApiUrls;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Created by Aleksei Vasilev.
@@ -18,6 +18,6 @@ public interface VisionClient {
 	@POST(VisionApiUrls.Vision.GET_TEXT)
 	Call<VisionResponse> getVisionResponse(
 			@Body VisionRequest body,
-			@Field("fields") String responseFields, // "responses(error,textAnnotations)"
-			@Field("key") String apiKey);
+			@Query("fields") String responseFields, // "responses(error,textAnnotations)"
+			@Query("key") String apiKey);
 }
