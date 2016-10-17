@@ -16,6 +16,9 @@
 	<string name="delete">Delete</string>
 	<string name="key_lang">key_lang</string>
 	<string name="lang_summary">Exclude languages based on the Latin alphabet</string>
+	<string name="action_search">Search</string>
+	<string name="error">Error</string>
+	<string name="nothing_detected">Nothing detected</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>

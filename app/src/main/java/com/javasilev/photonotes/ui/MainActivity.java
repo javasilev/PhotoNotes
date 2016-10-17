@@ -15,11 +15,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -44,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public static final int CAMERA_REQUEST = 3;
 
 	@BindView(R.id.activity_main_button_camera)
-	Button mCameraButton;
+	ImageButton mCameraButton;
 
 	@BindView(R.id.activity_main_button_gallery)
-	Button mGalleryButton;
+	ImageButton mGalleryButton;
 
 	@BindView(R.id.activity_main_progress_bar_loading)
 	ProgressBar mLoadingProgressBar;
@@ -58,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	@BindView(R.id.activity_main_button_cancel_loading)
 	Button mCancelButton;
 
+	@BindView(R.id.activity_main_toolbar)
+	Toolbar mActionBar;
+
+	@BindView(R.id.activity_main_linear_layout_main)
+	LinearLayout mMainView;
+
 	private VisionAsyncTask mAsyncTask;
 
 	private String mNoteName = "";
@@ -67,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
+
+		setSupportActionBar(mActionBar);
 
 		mCameraButton.setOnClickListener(this);
 		mGalleryButton.setOnClickListener(this);
@@ -195,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			returnCursor.close();
 			restartAsyncTask(uri.toString());
 		} else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-			mNoteName = "Note" + "_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+			mNoteName = "Note" + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 			restartAsyncTask(Uri.fromFile(getCameraFile()).toString());
 		}
 	}
@@ -209,12 +221,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			result = textAnnotations.get(0);
 		}
 
-		Note note = mDataSource.createOrUpdateNote(0, new Date(), mNoteName, result.getContent());
+		String content = result.getContent();
 
-		Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-		intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
-		intent.putExtra(NoteActivity.EXTRA_FROM, NoteActivity.MAIN);
-		startActivity(intent);
+		if (content.isEmpty()) {
+			final Snackbar snackbar = Snackbar.make(mMainView, R.string.nothing_detected, Snackbar.LENGTH_INDEFINITE);
+			snackbar.setAction(R.string.ok, new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							snackbar.dismiss();
+						}
+					}).show();
+		} else {
+			Note note = mDataSource.createOrUpdateNote(0, new Date(), mNoteName, content);
+
+			Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+			intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
+			intent.putExtra(NoteActivity.EXTRA_FROM, NoteActivity.MAIN);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -236,7 +260,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	@Override
 	public void showError(String error) {
-		//
+		final Snackbar snackbar = Snackbar.make(mMainView, R.string.error + ": " + error, Snackbar.LENGTH_INDEFINITE);
+		snackbar.setAction(R.string.ok, new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				snackbar.dismiss();
+			}
+		}).show();
 	}
 
 	private void toggleShow(int visibility) {

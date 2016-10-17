@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -30,6 +31,9 @@ public class NoteActivity extends AppCompatActivity {
 	@BindView(R.id.activity_note_edit_text_content)
 	EditText mContentEditText;
 
+	@BindView(R.id.activity_main_toolbar)
+	Toolbar mActionBar;
+
 	private NoteDataSource mDataSource;
 
 	private Note mNote;
@@ -47,6 +51,8 @@ public class NoteActivity extends AppCompatActivity {
 		mDataSource.init();
 		setContentView(R.layout.activity_note);
 		ButterKnife.bind(this);
+
+		setSupportActionBar(mActionBar);
 
 		long noteId = getIntent().getLongExtra(EXTRA_NOTE_ID, 0);
 		mFrom = getIntent().getExtras().getString(EXTRA_FROM, "");

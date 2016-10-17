@@ -64,8 +64,9 @@ public class NoteDataSource {
 
 	public List<Note> findNotes(String searchQuery) {
 		return mRealm.where(Note.class)
-				.contains("name", searchQuery)
-				.or().contains("text", searchQuery)
+				.contains("nameLowercased", searchQuery.toLowerCase())
+				.or()
+				.contains("textLowercased", searchQuery.toLowerCase())
 				.findAll();
 	}
 

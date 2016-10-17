@@ -1,6 +1,5 @@
 package com.javasilev.photonotes.async;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +27,7 @@ import retrofit2.Call;
  */
 
 public class VisionAsyncTask extends LoadAsyncTask<List<TextAnnotation>> {
-	private static final String API_KEY = "INSERT KEY HERE";
+	private static final String API_KEY = "INSERT API KEY HERE";
 
 	public VisionAsyncTask(Context context, ResultListener<List<TextAnnotation>> resultListener) {
 		super(context, resultListener);
@@ -64,11 +63,13 @@ public class VisionAsyncTask extends LoadAsyncTask<List<TextAnnotation>> {
 			if (response != null) {
 				mResultList = response.getTextAnnotations();
 			}
-		} catch (IOException e) {
-			//
+
+			mStatus = Status.COMPLETE;
+		} catch (Exception e) {
+			mException = e;
+			mStatus = Status.ERROR;
 		}
 
-		mStatus = Status.COMPLETE;
 		return mResultList;
 	}
 }

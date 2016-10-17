@@ -16,7 +16,9 @@ public class Note extends RealmObject implements Serializable {
 
 	private Date creationDate;
 	private String name;
+	private String nameLowercased;
 	private String text;
+	private String textLowercased;
 
 	public Note() {
 	}
@@ -25,7 +27,9 @@ public class Note extends RealmObject implements Serializable {
 		this.id = id;
 		this.creationDate = creationDate;
 		this.name = name;
+		this.nameLowercased = name.toLowerCase();
 		this.text = text;
+		this.textLowercased = text.toLowerCase();
 	}
 
 	public long getId() {
@@ -50,6 +54,7 @@ public class Note extends RealmObject implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		this.nameLowercased = name.toLowerCase();
 	}
 
 	public String getText() {
@@ -58,5 +63,6 @@ public class Note extends RealmObject implements Serializable {
 
 	public void setText(String text) {
 		this.text = text;
+		this.textLowercased = text.toLowerCase();
 	}
 }

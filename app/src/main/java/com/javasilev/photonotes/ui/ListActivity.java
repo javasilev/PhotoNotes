@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,6 +32,9 @@ public abstract class ListActivity<Data> extends AppCompatActivity implements Lo
 	@BindView(R.id.activity_list_recycler_view_data)
 	RecyclerView mDataRecyclerView;
 
+	@BindView(R.id.activity_main_toolbar)
+	Toolbar mActionBar;
+
 	protected CollectionAdapter<Data> mAdapter;
 
 	protected LoadAsyncTask<List<Data>> mLoadAsyncTask;
@@ -44,6 +48,8 @@ public abstract class ListActivity<Data> extends AppCompatActivity implements Lo
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list);
 		ButterKnife.bind(this);
+
+		setSupportActionBar(mActionBar);
 
 		mAdapter = createAdapter();
 		initRecyclerView();

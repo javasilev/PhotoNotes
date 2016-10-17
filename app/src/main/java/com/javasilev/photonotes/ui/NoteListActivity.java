@@ -4,8 +4,10 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,7 +71,32 @@ public class NoteListActivity extends ListActivity<Note> implements CollectionAd
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_list_notes, menu);
+		final MenuItem searchItem = menu.findItem(R.id.activity_list_notes_menu_action_search);
+		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				mAdapter.setCollection(mDataSource.findNotes(query));
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				mAdapter.setCollection(mDataSource.findNotes(newText));
+				return false;
+			}
+		});
+
+		searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+			@Override
+			public boolean onClose() {
+				mAdapter.setCollection(mDataSource.getAllNotes());
+				return false;
+			}
+		});
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
