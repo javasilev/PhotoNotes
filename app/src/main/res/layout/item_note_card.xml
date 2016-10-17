@@ -10,17 +10,18 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/colorPrimaryDark"
 		android:orientation="vertical"
 		android:paddingBottom="@dimen/modest"
 		android:paddingLeft="@dimen/modest"
 		android:paddingRight="@dimen/modest"
-		android:paddingTop="@dimen/minor"
-		android:background="@color/colorPrimaryDark">
+		android:paddingTop="@dimen/minor">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="@dimen/minor"
+			android:gravity="center_vertical"
 			android:orientation="horizontal">
 
 			<TextView
@@ -29,6 +30,8 @@
 				android:layout_height="wrap_content"
 				android:layout_marginRight="@dimen/minor"
 				android:layout_weight="1"
+				android:gravity="center_vertical"
+				android:lines="2"
 				android:textColor="@color/colorAccent"
 				android:textSize="16sp"
 				tools:ignore="RtlHardcoded"
@@ -38,20 +41,22 @@
 				android:id="@+id/item_note_card_text_view_date"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right"
-				android:textSize="12sp"
+				android:gravity="center_vertical"
+				android:layout_marginLeft="@dimen/minor"
 				android:textColor="@color/textColorSecondary"
+				android:textSize="12sp"
 				tools:text="21.01.2016" />
 		</LinearLayout>
-
+		
 		<TextView
 			android:id="@+id/item_note_card_text_view_content"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:gravity="center_vertical"
 			android:lines="4"
+			android:textColor="@color/textColorSecondary"
 			android:textSize="12sp"
 			android:textStyle="italic"
-			android:textColor="@color/textColorSecondary"
 			tools:text="List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection." />
 	</LinearLayout>
 </android.support.v7.widget.CardView>

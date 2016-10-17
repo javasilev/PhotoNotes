@@ -8,6 +8,7 @@
 		<item name="colorAccent">@color/colorAccent</item>
 
 		<item name="android:colorBackground">@color/colorPrimary</item>
+		<item name="android:windowBackground">@color/colorPrimary</item>
 		<item name="android:alertDialogTheme">@style/DialogStyle</item>
 
 		<item name="android:textColorPrimary">@color/textColorPrimary</item>

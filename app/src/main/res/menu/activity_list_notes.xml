@@ -10,8 +10,8 @@
 		app:actionViewClass="android.support.v7.widget.SearchView" />
 
 	<item
-		android:id="@+id/activity_list_notes_menu_all_notes"
-		android:title="@string/all_notes"
+		android:id="@+id/activity_list_notes_menu_start"
+		android:title="@string/Start_OCR"
 		app:showAsAction="never" />
 
 	<item

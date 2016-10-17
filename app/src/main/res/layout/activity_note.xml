@@ -23,8 +23,10 @@
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			android:layout_weight="1"
+			android:autoLink="all"
 			android:gravity="left"
 			android:hint="@string/content"
+			android:linksClickable="true"
 			android:textSize="14sp"
 			tools:ignore="RtlHardcoded" />
 	</LinearLayout>

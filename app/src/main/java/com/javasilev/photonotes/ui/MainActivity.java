@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				startActivity(new Intent(MainActivity.this, PrefsActivity.class));
 				return super.onOptionsItemSelected(item);
 			case R.id.activity_main_menu_about:
-				//
+				startActivity(new Intent(MainActivity.this, AboutActivity.class));
 				return super.onOptionsItemSelected(item);
 			default:
 				return super.onOptionsItemSelected(item);

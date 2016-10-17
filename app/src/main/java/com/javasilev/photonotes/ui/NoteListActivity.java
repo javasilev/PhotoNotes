@@ -31,6 +31,8 @@ public class NoteListActivity extends ListActivity<Note> implements CollectionAd
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mDataSource = NoteDataSource.getInstance();
+
+		setTitle(getString(R.string.saved_notes));
 	}
 
 	private void initList() {
@@ -103,14 +105,14 @@ public class NoteListActivity extends ListActivity<Note> implements CollectionAd
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.activity_main_menu_all_notes:
-				//
+			case R.id.activity_list_notes_menu_start:
+				startActivity(new Intent(NoteListActivity.this, MainActivity.class));
 				return super.onOptionsItemSelected(item);
-			case R.id.activity_main_menu_prefs:
+			case R.id.activity_list_notes_menu_prefs:
 				startActivity(new Intent(NoteListActivity.this, PrefsActivity.class));
 				return super.onOptionsItemSelected(item);
-			case R.id.activity_main_menu_about:
-				//
+			case R.id.activity_list_notes_menu_about:
+				startActivity(new Intent(NoteListActivity.this, AboutActivity.class));
 				return super.onOptionsItemSelected(item);
 			default:
 				return super.onOptionsItemSelected(item);

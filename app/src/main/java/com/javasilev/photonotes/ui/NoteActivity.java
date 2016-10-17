@@ -65,6 +65,8 @@ public class NoteActivity extends AppCompatActivity {
 				mContentEditText.setText(mNote.getText());
 			}
 		}
+
+		setTitle(getString(R.string.edit_note));
 	}
 
 	@Override

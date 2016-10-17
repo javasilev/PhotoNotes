@@ -19,6 +19,13 @@
 	<string name="action_search">Search</string>
 	<string name="error">Error</string>
 	<string name="nothing_detected">Nothing detected</string>
+	<string name="Start_OCR">Start OCR</string>
+	<string name="saved_notes">Saved notes</string>
+	<string name="edit_note">Edit note</string>
+	<string name="about_text">Application for recognition of text from images.\nUsed Google Cloud Vision Api.</string>
+	<string name="version">version 1.0</string>
+	<string name="author_aleksei_vasilev">author: Aleksei Vasilev</string>
+	<string name="photonotes_javasilev_com">photonotes@javasilev.com</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>

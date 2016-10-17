@@ -27,7 +27,7 @@ import retrofit2.Call;
  */
 
 public class VisionAsyncTask extends LoadAsyncTask<List<TextAnnotation>> {
-	private static final String API_KEY = "INSERT API KEY HERE";
+	private static final String API_KEY = "INSERT KEY HERE";
 
 	public VisionAsyncTask(Context context, ResultListener<List<TextAnnotation>> resultListener) {
 		super(context, resultListener);
