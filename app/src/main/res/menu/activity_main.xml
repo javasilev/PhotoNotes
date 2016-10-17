@@ -5,7 +5,7 @@
 	<item
 		android:id="@+id/activity_main_menu_all_notes"
 		android:title="@string/all_notes"
-		app:showAsAction="never" />
+		app:showAsAction="never"/>
 
 	<item
 		android:id="@+id/activity_main_menu_prefs"

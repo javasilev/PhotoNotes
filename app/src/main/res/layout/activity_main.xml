@@ -58,6 +58,7 @@
 			android:id="@+id/activity_main_text_view_progress"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/tiny"
 			android:textColor="@android:color/black"
 			android:textSize="18sp"
 			android:visibility="gone"
@@ -69,6 +70,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
+			android:background="@color/colorPrimary"
 			android:text="@string/cancel"
 			android:visibility="gone"
 			tools:visibility="visible" />

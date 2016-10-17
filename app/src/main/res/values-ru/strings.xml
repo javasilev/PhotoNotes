@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">ФотоЗаметки</string>
+	<string name="Start_OCR">Распознать</string>
+	<string name="about_text">Приложение для распознавания текста с изображений.\nИспользуется API Google Cloud Vision</string>
+	<string name="action_search">Найти</string>
+	<string name="all_notes">Все заметки</string>
+	<string name="author_aleksei_vasilev">автор: Алексей Васильев</string>
+	<string name="camera">Камера</string>
+	<string name="cancel">Отменить</string>
+	<string name="content">Текст:</string>
+	<string name="delete">Удалить</string>
+	<string name="edit_note">Редактировать</string>
+	<string name="error">Ошибка</string>
+	<string name="gallery">Галерея</string>
+	<string name="lang_summary">Кроме языков, основанных на латинском алфавите</string>
+	<string name="name">Название:</string>
+	<string name="nothing_detected">Ничего не распознано</string>
+	<string name="preferences">Настройки</string>
+	<string name="processing">Обработка...</string>
+	<string name="save">Сохранить</string>
+	<string name="saved_notes">Сохраненные заметки</string>
+	<string name="select_option">Выберите:</string>
+	<string name="languages">Языки</string>
+
+	<string-array name="lang_entries">
+		<item>Белорусский</item>
+		<item>Русский</item>
+		<item>Сербский</item>
+		<item>Словацкий</item>
+		<item>Таджикский</item>
+		<item>Украинский</item>
+		<item>Узбекский</item>
+	</string-array>
+
+	<string-array name="lang_defaults">
+		<item>ru</item>
+	</string-array>
+
+	<string-array name="lang_values">
+		<item>be</item>
+		<item>ru</item>
+		<item>sr</item>
+		<item>sk</item>
+		<item>tg</item>
+		<item>uk</item>
+		<item>uz</item>
+	</string-array>
+</resources>

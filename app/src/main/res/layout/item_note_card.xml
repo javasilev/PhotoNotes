@@ -4,13 +4,16 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_margin="@dimen/minor"
+	android:layout_marginBottom="@dimen/tiny"
+	android:layout_marginLeft="@dimen/minor"
+	android:layout_marginRight="@dimen/minor"
+	android:layout_marginTop="@dimen/tiny"
 	app:cardCornerRadius="@dimen/tiny">
 
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:background="@color/colorPrimaryDark"
+		android:background="#858d6e63"
 		android:orientation="vertical"
 		android:paddingBottom="@dimen/modest"
 		android:paddingLeft="@dimen/modest"
@@ -32,8 +35,9 @@
 				android:layout_weight="1"
 				android:gravity="center_vertical"
 				android:lines="2"
-				android:textColor="@color/colorAccent"
+				android:textColor="@color/textColorPrimary"
 				android:textSize="16sp"
+				android:textStyle="bold"
 				tools:ignore="RtlHardcoded"
 				tools:text="Note_name_15416511" />
 
@@ -41,13 +45,19 @@
 				android:id="@+id/item_note_card_text_view_date"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:gravity="center_vertical"
 				android:layout_marginLeft="@dimen/minor"
+				android:gravity="center_vertical"
 				android:textColor="@color/textColorSecondary"
 				android:textSize="12sp"
 				tools:text="21.01.2016" />
 		</LinearLayout>
-		
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="2dp"
+			android:layout_marginBottom="@dimen/tiny"
+			android:background="@drawable/line_divider" />
+
 		<TextView
 			android:id="@+id/item_note_card_text_view_content"
 			android:layout_width="match_parent"

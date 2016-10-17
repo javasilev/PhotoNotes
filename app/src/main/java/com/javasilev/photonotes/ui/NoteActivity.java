@@ -2,7 +2,7 @@ package com.javasilev.photonotes.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -40,19 +40,20 @@ public class NoteActivity extends AppCompatActivity {
 	private String mFrom;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-		super.onCreate(savedInstanceState, persistentState);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		mDataSource = NoteDataSource.getInstance();
 		mDataSource.init();
 		setContentView(R.layout.activity_note);
 		ButterKnife.bind(this);
 
 		setSupportActionBar(mActionBar);
+		setTitle(getString(R.string.edit_note));
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 
 		long noteId = getIntent().getLongExtra(EXTRA_NOTE_ID, 0);
 		mFrom = getIntent().getExtras().getString(EXTRA_FROM, "");
@@ -65,8 +66,6 @@ public class NoteActivity extends AppCompatActivity {
 				mContentEditText.setText(mNote.getText());
 			}
 		}
-
-		setTitle(getString(R.string.edit_note));
 	}
 
 	@Override

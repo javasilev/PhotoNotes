@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			returnCursor.close();
 			restartAsyncTask(uri.toString());
 		} else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-			mNoteName = "Note" + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+			mNoteName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
 			restartAsyncTask(Uri.fromFile(getCameraFile()).toString());
 		}
 	}
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		String content = result.getContent();
 
 		if (content.isEmpty()) {
-			final Snackbar snackbar = Snackbar.make(mMainView, R.string.nothing_detected, Snackbar.LENGTH_INDEFINITE);
+			final Snackbar snackbar = Snackbar.make(mMainView, R.string.nothing_detected, Snackbar.LENGTH_LONG);
 			snackbar.setAction(R.string.ok, new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {

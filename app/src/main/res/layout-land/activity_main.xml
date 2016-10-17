@@ -12,13 +12,13 @@
 		android:id="@+id/activity_main_linear_layout_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:orientation="horizontal"
-		android:padding="@dimen/rich"
-		android:layout_marginTop="?attr/actionBarSize"
-		tools:context="com.javasilev.photonotes.ui.MainActivity"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentStart="true">
+		android:layout_alignParentStart="true"
+		android:layout_marginTop="?attr/actionBarSize"
+		android:orientation="horizontal"
+		android:padding="@dimen/rich"
+		tools:context="com.javasilev.photonotes.ui.MainActivity">
 
 		<ImageButton
 			android:id="@+id/activity_main_button_camera"
@@ -60,6 +60,7 @@
 			android:id="@+id/activity_main_text_view_progress"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/tiny"
 			android:textColor="@android:color/black"
 			android:textSize="18sp"
 			android:visibility="gone"
@@ -71,6 +72,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
+			android:background="@color/colorPrimary"
 			android:text="@string/cancel"
 			android:visibility="gone"
 			tools:visibility="visible" />

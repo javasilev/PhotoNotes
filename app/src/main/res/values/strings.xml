@@ -1,20 +1,20 @@
 <resources>
 	<string name="app_name">Photo Notes</string>
-	<string name="base_api_url">https://vision.googleapis.com/</string>
+	<string name="base_api_url" translatable="false">https://vision.googleapis.com/</string>
 	<string name="select_option">Select option:</string>
 	<string name="camera">Camera</string>
 	<string name="gallery">Gallery</string>
-	<string name="ok">OK</string>
+	<string name="ok" translatable="false">OK</string>
 	<string name="name">Name:</string>
 	<string name="content">Content:</string>
 	<string name="processing">Processing...</string>
 	<string name="cancel">Cancel</string>
 	<string name="all_notes">All notes</string>
 	<string name="preferences">Preferences</string>
-	<string name="about">About</string>
+	<string name="about" translatable="false">About</string>
 	<string name="save">Save</string>
 	<string name="delete">Delete</string>
-	<string name="key_lang">key_lang</string>
+	<string name="key_lang" translatable="false">key_lang</string>
 	<string name="lang_summary">Exclude languages based on the Latin alphabet</string>
 	<string name="action_search">Search</string>
 	<string name="error">Error</string>
@@ -23,9 +23,10 @@
 	<string name="saved_notes">Saved notes</string>
 	<string name="edit_note">Edit note</string>
 	<string name="about_text">Application for recognition of text from images.\nUsed Google Cloud Vision Api.</string>
-	<string name="version">version 1.0</string>
+	<string name="version" translatable="false">version 1.0</string>
 	<string name="author_aleksei_vasilev">author: Aleksei Vasilev</string>
-	<string name="photonotes_javasilev_com">photonotes@javasilev.com</string>
+	<string name="photonotes_javasilev_com" translatable="false">photonotes@javasilev.com</string>
+	<string name="languages">Languages</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>
@@ -39,8 +40,6 @@
 
 	<string-array name="lang_defaults">
 		<item>ru</item>
-		<item>sr</item>
-		<item>uz</item>
 	</string-array>
 
 	<string-array name="lang_values">
