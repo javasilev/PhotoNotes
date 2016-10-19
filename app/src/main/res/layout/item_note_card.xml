@@ -1,72 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView android:id="@+id/item_note_card_view"
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_marginBottom="@dimen/tiny"
-	android:layout_marginLeft="@dimen/minor"
-	android:layout_marginRight="@dimen/minor"
-	android:layout_marginTop="@dimen/tiny"
-	app:cardCornerRadius="@dimen/tiny">
+	android:layout_marginBottom="2dp"
+	app:cardCornerRadius="0dp">
 
-	<LinearLayout
+	<com.daimajia.swipe.SwipeLayout
+		android:id="@+id/item_note_card_swipe"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="#858d6e63"
-		android:orientation="vertical"
-		android:paddingBottom="@dimen/modest"
-		android:paddingLeft="@dimen/modest"
-		android:paddingRight="@dimen/modest"
-		android:paddingTop="@dimen/minor">
+		android:layout_height="wrap_content">
+
+		<LinearLayout
+			android:id="@+id/item_note_card_linear_layout_bottom"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:background="@color/material_gray_800"
+			android:gravity="center"
+			android:padding="@dimen/modest"
+			tools:ignore="RtlHardcoded">
+
+			<ImageButton
+				android:id="@+id/item_note_card_button_delete"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@android:color/transparent"
+				android:src="@drawable/ic_delete_white_48dp" />
+		</LinearLayout>
 
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/minor"
-			android:gravity="center_vertical"
-			android:orientation="horizontal">
+			android:layout_height="match_parent"
+			android:background="@color/note_card_background"
+			android:orientation="vertical"
+			android:paddingBottom="@dimen/modest"
+			android:paddingLeft="@dimen/modest"
+			android:paddingRight="@dimen/modest"
+			android:paddingTop="@dimen/minor">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/minor"
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/item_note_card_text_view_name"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="@dimen/minor"
+					android:layout_weight="1"
+					android:gravity="center_vertical"
+					android:lines="2"
+					android:textColor="@color/textColorPrimary"
+					android:textSize="16sp"
+					android:textStyle="bold"
+					tools:ignore="RtlHardcoded"
+					tools:text="Note_name_15416511" />
+
+				<TextView
+					android:id="@+id/item_note_card_text_view_date"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="@dimen/minor"
+					android:gravity="center_vertical"
+					android:textColor="@color/textColorSecondary"
+					android:textSize="12sp"
+					tools:ignore="RtlHardcoded"
+					tools:text="21.01.2016" />
+			</LinearLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:layout_marginBottom="@dimen/tiny"
+				android:background="@drawable/line_divider" />
 
 			<TextView
-				android:id="@+id/item_note_card_text_view_name"
-				android:layout_width="0dp"
+				android:id="@+id/item_note_card_text_view_content"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/minor"
-				android:layout_weight="1"
 				android:gravity="center_vertical"
-				android:lines="2"
-				android:textColor="@color/textColorPrimary"
-				android:textSize="16sp"
-				android:textStyle="bold"
-				tools:ignore="RtlHardcoded"
-				tools:text="Note_name_15416511" />
-
-			<TextView
-				android:id="@+id/item_note_card_text_view_date"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/minor"
-				android:gravity="center_vertical"
+				android:lines="4"
 				android:textColor="@color/textColorSecondary"
 				android:textSize="12sp"
-				tools:text="21.01.2016" />
+				android:textStyle="italic"
+				tools:text="List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection." />
 		</LinearLayout>
-
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="2dp"
-			android:layout_marginBottom="@dimen/tiny"
-			android:background="@drawable/line_divider" />
-
-		<TextView
-			android:id="@+id/item_note_card_text_view_content"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center_vertical"
-			android:lines="4"
-			android:textColor="@color/textColorSecondary"
-			android:textSize="12sp"
-			android:textStyle="italic"
-			tools:text="List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection." />
-	</LinearLayout>
+	</com.daimajia.swipe.SwipeLayout>
 </android.support.v7.widget.CardView>

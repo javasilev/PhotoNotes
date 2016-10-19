@@ -49,6 +49,9 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:logging-interceptor:3.3.1"
 
+    /* Swipe Layout */
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+
     /* Tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

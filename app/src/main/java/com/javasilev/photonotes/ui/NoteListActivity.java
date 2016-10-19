@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,23 +44,6 @@ public class NoteListActivity extends ListActivity<Note> implements CollectionAd
 		initList();
 
 		mDataRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-		ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-			@Override
-			public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-				return false;
-			}
-
-			@Override
-			public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-				mDataSource.deleteNote(mAdapter.getItem(viewHolder.getAdapterPosition()).getId());
-				mAdapter.removeItem(viewHolder.getAdapterPosition());
-			}
-		};
-
-		ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-		itemTouchHelper.attachToRecyclerView(mDataRecyclerView);
 	}
 
 	@Override
@@ -139,5 +120,11 @@ public class NoteListActivity extends ListActivity<Note> implements CollectionAd
 		Intent intent = new Intent(this, NoteActivity.class);
 		intent.putExtra(NoteActivity.EXTRA_NOTE_ID, item.getId());
 		startActivity(intent);
+	}
+
+	@Override
+	public void onDelete(int position, long itemId) {
+		mAdapter.removeItem(position);
+		mDataSource.deleteNote(itemId);
 	}
 }

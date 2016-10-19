@@ -74,5 +74,6 @@ public abstract class CollectionAdapter<T> extends RecyclerView.Adapter<SimpleVi
 
 	public interface OnItemClickListener<T> {
 		void onItemClick(T item);
+		void onDelete(int position, long itemId);
 	}
 }

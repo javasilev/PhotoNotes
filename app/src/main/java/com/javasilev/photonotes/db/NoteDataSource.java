@@ -67,7 +67,7 @@ public class NoteDataSource {
 				.contains("nameLowercased", searchQuery.toLowerCase())
 				.or()
 				.contains("textLowercased", searchQuery.toLowerCase())
-				.findAll();
+				.findAllSorted("creationDate", Sort.DESCENDING);
 	}
 
 	public void init() {
