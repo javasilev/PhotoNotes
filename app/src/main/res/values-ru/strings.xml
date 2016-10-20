@@ -4,7 +4,7 @@
 	<string name="Start_OCR">Распознать</string>
 	<string name="about_text">Приложение для распознавания текста с изображений.\nИспользуется API Google Cloud Vision</string>
 	<string name="action_search">Найти</string>
-	<string name="all_notes">Все заметки</string>
+	<string name="all_notes">Заметки</string>
 	<string name="author_aleksei_vasilev">автор: Алексей Васильев</string>
 	<string name="camera">Камера</string>
 	<string name="cancel">Отменить</string>

@@ -9,7 +9,7 @@
 	<string name="content">Content:</string>
 	<string name="processing">Processing...</string>
 	<string name="cancel">Cancel</string>
-	<string name="all_notes">All notes</string>
+	<string name="all_notes">Notes</string>
 	<string name="preferences">Preferences</string>
 	<string name="about" translatable="false">About</string>
 	<string name="save">Save</string>

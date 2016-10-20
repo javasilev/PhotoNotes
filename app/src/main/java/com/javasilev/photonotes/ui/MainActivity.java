@@ -15,8 +15,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -25,11 +27,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.javasilev.photonotes.R;
+import com.javasilev.photonotes.adapters.MainPagerAdapter;
 import com.javasilev.photonotes.models.Note;
 import com.javasilev.photonotes.models.response.TextAnnotation;
 import com.javasilev.photonotes.presenters.NoteListPresenter;
@@ -46,14 +48,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Observer<List<TextAnnotation>> {
-	public static final String MAIN_FRAGMENT_TAG = "main";
-
 	public static final String FILE_NAME = "temp.jpg";
 
 	public static final int GALLERY_REQUEST = 1;
 	public static final int CAMERA_PERMISSIONS_REQUEST = 2;
 	public static final int CAMERA_REQUEST = 3;
-	public static final int CONTAINER = R.id.activity_main_frame_layout_container;
+	public static final int CONTAINER = R.id.activity_main_viewpager;
+
+	public static final int NOTES_POSITION = 1;
 
 	@BindView(R.id.activity_main_progress_bar_loading)
 	ProgressBar mLoadingProgressBar;
@@ -68,7 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	Toolbar mActionBar;
 
 	@BindView(CONTAINER)
-	FrameLayout mContainerFrameLayout;
+	ViewPager mViewPager;
+
+	@BindView(R.id.activity_main_tabs)
+	TabLayout mTabLayout;
 
 	private VisionPresenter mVisionPresenter;
 	private NotePresenter mNotePresenter;
@@ -84,14 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		setSupportActionBar(mActionBar);
 
-		getSupportFragmentManager()
-				.beginTransaction()
-				.replace(CONTAINER, new MainFragment(), MAIN_FRAGMENT_TAG)
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-				.commitNow();
-
-		//noinspection unchecked
-		mBooleanObserver = (Observer<Boolean>) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
+		setupViewPager(mViewPager);
+		mTabLayout.setupWithViewPager(mViewPager);
 
 		mNotePresenter = new NotePresenter();
 
@@ -117,15 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		final MenuItem searchItem = menu.findItem(R.id.activity_main_menu_action_search);
 		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-		NoteListFragment fragment = new NoteListFragment();
+		NoteListFragment fragment = (NoteListFragment) ((FragmentPagerAdapter) mViewPager.getAdapter()).getItem(NOTES_POSITION);
 		NoteListPresenter presenter = new NoteListPresenter(fragment);
 
-		searchView.setOnSearchClickListener(v -> getSupportFragmentManager()
-				.beginTransaction()
-				.replace(CONTAINER, fragment)
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-				.addToBackStack(null)
-				.commit());
+		searchView.setOnSearchClickListener(v -> mViewPager.setCurrentItem(NOTES_POSITION));
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -156,14 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.activity_main_menu_all_notes:
-				getSupportFragmentManager()
-						.beginTransaction()
-						.replace(R.id.activity_main_frame_layout_container, new NoteListFragment())
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-						.addToBackStack(null)
-						.commit();
-				return super.onOptionsItemSelected(item);
 			case R.id.activity_main_menu_prefs:
 				startActivity(new Intent(MainActivity.this, PrefsActivity.class));
 				return super.onOptionsItemSelected(item);
@@ -173,12 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		getSupportFragmentManager().popBackStack();
 	}
 
 	private File getCameraFile() {
@@ -241,12 +221,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			Uri uri = data.getData();
 			Cursor returnCursor = getContentResolver().query(uri, null, null, null, null);
 
-			assert returnCursor != null;
-			int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-			returnCursor.moveToFirst();
-			mNoteName = returnCursor.getString(nameIndex);
+			if (returnCursor != null) {
+				int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+				returnCursor.moveToFirst();
+				mNoteName = returnCursor.getString(nameIndex);
+				returnCursor.close();
+			} else {
+				mNoteName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+			}
 
-			returnCursor.close();
 			mVisionPresenter.load(uri);
 			startLoading();
 		} else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
@@ -284,6 +267,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		.subscribe(mBooleanObserver);
 	}
 
+	private void setupViewPager(ViewPager viewPager) {
+		MainFragment mainFragment = new MainFragment();
+
+		//noinspection unchecked
+		mBooleanObserver = mainFragment;
+
+		MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
+		adapter.addFragment(mainFragment, getString(R.string.Start_OCR));
+		adapter.addFragment(new NoteListFragment(), getString(R.string.all_notes));
+		viewPager.setAdapter(adapter);
+	}
+
 	@Override
 	public void onCompleted() {
 		hideLoading();
@@ -309,8 +304,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 			Intent intent = new Intent(MainActivity.this, NoteActivity.class);
 			intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
-			intent.putExtra(NoteActivity.EXTRA_FROM, NoteActivity.MAIN);
 			startActivity(intent);
+		} else {
+			onError(new Exception(getString(R.string.nothing_detected)));
 		}
 	}
 }

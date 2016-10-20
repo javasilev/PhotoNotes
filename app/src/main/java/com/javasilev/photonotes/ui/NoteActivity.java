@@ -1,6 +1,5 @@
 package com.javasilev.photonotes.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -20,8 +19,6 @@ import butterknife.ButterKnife;
 
 public class NoteActivity extends AppCompatActivity {
 	public static final String EXTRA_NOTE_ID = "extra_note_id";
-	public static final String EXTRA_FROM = "extra_from";
-	public static final String MAIN = "main";
 
 	private static final int CONTAINER = R.id.activity_note_frame_layout_note_container;
 
@@ -29,7 +26,6 @@ public class NoteActivity extends AppCompatActivity {
 	Toolbar mActionBar;
 
 	private long mNoteId;
-	private String mFrom;
 	private NoteFragment mFragment;
 
 	@Override
@@ -47,7 +43,6 @@ public class NoteActivity extends AppCompatActivity {
 		super.onStart();
 
 		mNoteId = getIntent().getLongExtra(EXTRA_NOTE_ID, 0);
-		mFrom = getIntent().getExtras().getString(EXTRA_FROM, "");
 
 		mFragment = NoteFragment.newInstance(mNoteId);
 
@@ -56,14 +51,6 @@ public class NoteActivity extends AppCompatActivity {
 				.replace(CONTAINER, mFragment)
 				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 				.commit();
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (MAIN.equals(mFrom)) {
-			startActivity(new Intent(this, MainActivity.class));
-		}
-		super.onBackPressed();
 	}
 
 	@Override
