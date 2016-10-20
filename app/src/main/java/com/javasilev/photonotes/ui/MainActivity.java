@@ -33,6 +33,8 @@ import android.widget.TextView;
 import com.javasilev.photonotes.R;
 import com.javasilev.photonotes.adapters.MainPagerAdapter;
 import com.javasilev.photonotes.models.Note;
+import com.javasilev.photonotes.models.response.Error;
+import com.javasilev.photonotes.models.response.Response;
 import com.javasilev.photonotes.models.response.TextAnnotation;
 import com.javasilev.photonotes.presenters.NoteListPresenter;
 import com.javasilev.photonotes.presenters.NotePresenter;
@@ -47,7 +49,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, Observer<List<TextAnnotation>> {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Observer<List<Response>> {
 	public static final String FILE_NAME = "temp.jpg";
 
 	public static final int GALLERY_REQUEST = 1;
@@ -295,18 +297,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	@Override
-	public void onNext(List<TextAnnotation> textAnnotations) {
-		if (textAnnotations != null && textAnnotations.size() != 0) {
-			TextAnnotation result = textAnnotations.get(0);
-			String content = result.getContent();
+	public void onNext(List<Response> responses) {
+		if (responses != null && responses.size() > 0) {
+			Response response = responses.get(0);
+			Error error = response.getError();
+			if (error != null && error.getCode() == 400) {
+				onError(new Exception(error.getMessage()));
+				return;
+			}
 
-			Note note = mNotePresenter.createOrUpdate(new Note(0, new Date(), mNoteName, content));
+			List<TextAnnotation> textAnnotations = response.getTextAnnotations();
 
-			Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-			intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
-			startActivity(intent);
-		} else {
-			onError(new Exception(getString(R.string.nothing_detected)));
+			if (textAnnotations != null && textAnnotations.size() > 0) {
+				TextAnnotation result = textAnnotations.get(0);
+				String content = result.getContent();
+
+				Note note = mNotePresenter.createOrUpdate(new Note(0, new Date(), mNoteName, content));
+
+				Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+				intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
+				startActivity(intent);
+			} else {
+				onError(new Exception(getString(R.string.nothing_detected)));
+			}
 		}
 	}
 }
