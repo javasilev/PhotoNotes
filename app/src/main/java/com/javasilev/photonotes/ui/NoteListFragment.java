@@ -38,6 +38,9 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 	@BindView(R.id.fragment_list_recycler_view_data)
 	RecyclerView mDataRecyclerView;
 
+	@BindView(R.id.fragment_list_text_view_empty)
+	TextView mEmptyText;
+
 	private NoteAdapter mAdapter;
 	private NoteListPresenter mPresenter;
 
@@ -80,6 +83,7 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 	public void onDelete(int position, long itemId) {
 		mAdapter.removeItem(position);
 		mPresenter.deleteNote(itemId);
+		setEmptyState(mAdapter.getItemCount() == 0);
 	}
 
 	@Override
@@ -95,6 +99,11 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 	@Override
 	public void onNext(List<Note> notes) {
 		mAdapter.setCollection(notes);
+		setEmptyState(notes.size() == 0);
+	}
+
+	private void setEmptyState(boolean empty) {
+		mEmptyText.setVisibility(empty ? View.VISIBLE : View.GONE);
 	}
 
 	private void initRecyclerView() {
