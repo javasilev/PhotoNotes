@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'realm-android'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
@@ -19,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -29,6 +34,7 @@ dependencies {
     final PICASSO_VERSION = '2.5.2'
     final GSON_VERSION = '2.7'
     final RETROFIT_VERSION = '2.1.0'
+    final RX_VERSION = '1.2.1'
 
     /* support libraries */
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
@@ -47,10 +53,15 @@ dependencies {
     /* Retrofit & OkHttp */
     compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:logging-interceptor:3.3.1"
 
     /* Swipe Layout */
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+
+    /* Rx */
+    compile "io.reactivex:rxjava:$RX_VERSION"
+    compile "io.reactivex:rxandroid:$RX_VERSION"
 
     /* Tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

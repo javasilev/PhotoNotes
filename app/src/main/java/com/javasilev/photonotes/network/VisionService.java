@@ -8,6 +8,7 @@ import com.javasilev.photonotes.urls.VisionApiUrls;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -35,6 +36,7 @@ public class VisionService {
 		mRetrofit = new Retrofit.Builder()
 				.baseUrl(VisionApiUrls.getApiBaseUrl(context))
 				.addConverterFactory(GsonConverterFactory.create())
+				.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
 				.client(createOkHttpClient())
 				.build();
 	}
@@ -42,7 +44,7 @@ public class VisionService {
 	@NonNull
 	private OkHttpClient createOkHttpClient() {
 		HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-		httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+		httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
 		return new OkHttpClient.Builder()
 				.addInterceptor(httpLoggingInterceptor)

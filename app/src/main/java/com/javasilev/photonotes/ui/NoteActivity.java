@@ -3,15 +3,13 @@ package com.javasilev.photonotes.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 
 import com.javasilev.photonotes.R;
-import com.javasilev.photonotes.db.NoteDataSource;
-import com.javasilev.photonotes.models.Note;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,25 +23,18 @@ public class NoteActivity extends AppCompatActivity {
 	public static final String EXTRA_FROM = "extra_from";
 	public static final String MAIN = "main";
 
-	@BindView(R.id.activity_note_edit_text_name)
-	EditText mNameEditText;
-
-	@BindView(R.id.activity_note_edit_text_content)
-	EditText mContentEditText;
+	private static final int CONTAINER = R.id.activity_note_frame_layout_note_container;
 
 	@BindView(R.id.activity_main_toolbar)
 	Toolbar mActionBar;
 
-	private NoteDataSource mDataSource;
-
-	private Note mNote;
+	private long mNoteId;
 	private String mFrom;
+	private NoteFragment mFragment;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mDataSource = NoteDataSource.getInstance();
-		mDataSource.init();
 		setContentView(R.layout.activity_note);
 		ButterKnife.bind(this);
 
@@ -55,38 +46,24 @@ public class NoteActivity extends AppCompatActivity {
 	protected void onStart() {
 		super.onStart();
 
-		long noteId = getIntent().getLongExtra(EXTRA_NOTE_ID, 0);
+		mNoteId = getIntent().getLongExtra(EXTRA_NOTE_ID, 0);
 		mFrom = getIntent().getExtras().getString(EXTRA_FROM, "");
 
-		if (noteId != 0) {
-			mNote = mDataSource.getNote(noteId);
+		mFragment = NoteFragment.newInstance(mNoteId);
 
-			if (mNote != null) {
-				mNameEditText.setText(mNote.getName());
-				mContentEditText.setText(mNote.getText());
-			}
-		}
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		mDataSource.close();
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(CONTAINER, mFragment)
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+				.commit();
 	}
 
 	@Override
 	public void onBackPressed() {
-		saveOrUpdate();
 		if (MAIN.equals(mFrom)) {
 			startActivity(new Intent(this, MainActivity.class));
 		}
 		super.onBackPressed();
-	}
-
-	private void saveOrUpdate() {
-		if (mNote != null) {
-			mDataSource.createOrUpdateNote(mNote.getId(), mNote.getCreationDate(), mNameEditText.getText().toString(), mContentEditText.getText().toString());
-		}
 	}
 
 	@Override
@@ -99,11 +76,11 @@ public class NoteActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.activity_notes_menu_save:
-				saveOrUpdate();
+				mFragment.saveNote();
 				return super.onOptionsItemSelected(item);
 			case R.id.activity_notes_menu_delete:
 				delete();
-				startActivity(new Intent(NoteActivity.this, NoteListActivity.class));
+				onBackPressed();
 				return super.onOptionsItemSelected(item);
 			default:
 				return super.onOptionsItemSelected(item);
@@ -111,8 +88,6 @@ public class NoteActivity extends AppCompatActivity {
 	}
 
 	private void delete() {
-		if (mNote != null) {
-			mDataSource.deleteNote(mNote.getId());
-		}
+		mFragment.deleteNote(mNoteId);
 	}
 }

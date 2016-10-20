@@ -15,43 +15,45 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.javasilev.photonotes.R;
-import com.javasilev.photonotes.async.LoadAsyncTask;
-import com.javasilev.photonotes.async.VisionAsyncTask;
-import com.javasilev.photonotes.db.NoteDataSource;
 import com.javasilev.photonotes.models.Note;
 import com.javasilev.photonotes.models.response.TextAnnotation;
+import com.javasilev.photonotes.presenters.NoteListPresenter;
+import com.javasilev.photonotes.presenters.NotePresenter;
+import com.javasilev.photonotes.presenters.VisionPresenter;
 import com.javasilev.photonotes.utils.PermissionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoadAsyncTask.ResultListener<List<TextAnnotation>> {
-	private NoteDataSource mDataSource;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Observer<List<TextAnnotation>> {
+	public static final String MAIN_FRAGMENT_TAG = "main";
 
 	public static final String FILE_NAME = "temp.jpg";
 
 	public static final int GALLERY_REQUEST = 1;
 	public static final int CAMERA_PERMISSIONS_REQUEST = 2;
 	public static final int CAMERA_REQUEST = 3;
-
-	@BindView(R.id.activity_main_button_camera)
-	ImageButton mCameraButton;
-
-	@BindView(R.id.activity_main_button_gallery)
-	ImageButton mGalleryButton;
+	public static final int CONTAINER = R.id.activity_main_frame_layout_container;
 
 	@BindView(R.id.activity_main_progress_bar_loading)
 	ProgressBar mLoadingProgressBar;
@@ -65,10 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	@BindView(R.id.activity_main_toolbar)
 	Toolbar mActionBar;
 
-	@BindView(R.id.activity_main_linear_layout_main)
-	LinearLayout mMainView;
+	@BindView(CONTAINER)
+	FrameLayout mContainerFrameLayout;
 
-	private VisionAsyncTask mAsyncTask;
+	private VisionPresenter mVisionPresenter;
+	private NotePresenter mNotePresenter;
+	private Observer<Boolean> mBooleanObserver;
 
 	private String mNoteName = "";
 
@@ -80,26 +84,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		setSupportActionBar(mActionBar);
 
-		mCameraButton.setOnClickListener(this);
-		mGalleryButton.setOnClickListener(this);
-		mCancelButton.setOnClickListener(this);
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(CONTAINER, new MainFragment(), MAIN_FRAGMENT_TAG)
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+				.commitNow();
 
-		mAsyncTask = (VisionAsyncTask) getLastCustomNonConfigurationInstance();
+		//noinspection unchecked
+		mBooleanObserver = (Observer<Boolean>) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
+
+		mNotePresenter = new NotePresenter();
+
+		mVisionPresenter = (VisionPresenter) getLastCustomNonConfigurationInstance();
+		if (mVisionPresenter != null && mVisionPresenter.isInProcess()) {
+			startLoading();
+		} else {
+			mVisionPresenter = new VisionPresenter(this, this);
+		}
+
+		mCancelButton.setOnClickListener(this);
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		mDataSource = NoteDataSource.getInstance();
-		mDataSource.init();
-		if (mAsyncTask != null) {
-			mAsyncTask.setResultListener(this);
-		}
+	public Object onRetainCustomNonConfigurationInstance() {
+		return mVisionPresenter;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
+
+		final MenuItem searchItem = menu.findItem(R.id.activity_main_menu_action_search);
+		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+		NoteListFragment fragment = new NoteListFragment();
+		NoteListPresenter presenter = new NoteListPresenter(fragment);
+
+		searchView.setOnSearchClickListener(v -> getSupportFragmentManager()
+				.beginTransaction()
+				.replace(CONTAINER, fragment)
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+				.addToBackStack(null)
+				.commit());
+
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				find(query);
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				find(newText);
+				return false;
+			}
+
+			private void find(String query) {
+				presenter.findNotes(query);
+			}
+		});
+
+		searchView.setOnCloseListener(() -> {
+			presenter.loadNotes();
+			return false;
+		});
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -107,7 +157,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.activity_main_menu_all_notes:
-				startActivity(new Intent(MainActivity.this, NoteListActivity.class));
+				getSupportFragmentManager()
+						.beginTransaction()
+						.replace(R.id.activity_main_frame_layout_container, new NoteListFragment())
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+						.addToBackStack(null)
+						.commit();
 				return super.onOptionsItemSelected(item);
 			case R.id.activity_main_menu_prefs:
 				startActivity(new Intent(MainActivity.this, PrefsActivity.class));
@@ -121,22 +176,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
-		mDataSource.close();
-		if (mAsyncTask != null) {
-			mAsyncTask.setResultListener(null);
-		}
-	}
-
-	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return mAsyncTask;
-	}
-
-	@Override
 	public void onBackPressed() {
-		moveTaskToBack(true);
+		super.onBackPressed();
+		getSupportFragmentManager().popBackStack();
 	}
 
 	private File getCameraFile() {
@@ -147,14 +189,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.activity_main_button_camera:
+			case R.id.fragment_main_button_camera:
 				startCamera();
 				break;
-			case R.id.activity_main_button_gallery:
+			case R.id.fragment_main_button_gallery:
 				startGalleryChooser();
 				break;
 			case R.id.activity_main_button_cancel_loading:
-				mAsyncTask.cancel(true);
+				mVisionPresenter.stop();
 				hideLoading();
 		}
 	}
@@ -205,68 +247,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			mNoteName = returnCursor.getString(nameIndex);
 
 			returnCursor.close();
-			restartAsyncTask(uri.toString());
+			mVisionPresenter.load(uri);
+			startLoading();
 		} else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 			mNoteName = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-			restartAsyncTask(Uri.fromFile(getCameraFile()).toString());
+			mVisionPresenter.load(Uri.fromFile(getCameraFile()));
+			startLoading();
 		}
 	}
 
-	@Override
-	public void setItems(List<TextAnnotation> textAnnotations) {
-		TextAnnotation result;
-		if (textAnnotations == null || textAnnotations.size() == 0) {
-			result = new TextAnnotation("", "", null);
-		} else {
-			result = textAnnotations.get(0);
-		}
-
-		String content = result.getContent();
-
-		if (content.isEmpty()) {
-			final Snackbar snackbar = Snackbar.make(mMainView, R.string.nothing_detected, Snackbar.LENGTH_LONG);
-			snackbar.setAction(R.string.ok, new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							snackbar.dismiss();
-						}
-					}).show();
-		} else {
-			Note note = mDataSource.createOrUpdateNote(0, new Date(), mNoteName, content);
-
-			Intent intent = new Intent(MainActivity.this, NoteActivity.class);
-			intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
-			intent.putExtra(NoteActivity.EXTRA_FROM, NoteActivity.MAIN);
-			startActivity(intent);
-		}
-	}
-
-	@Override
 	public void startLoading() {
 		toggleEnable(false);
 		toggleShow(View.VISIBLE);
 	}
 
-	@Override
-	public void hideLoading() {
+	private void hideLoading() {
 		toggleEnable(true);
 		toggleShow(View.GONE);
-	}
-
-	@Override
-	public void showProgress(String... progress) {
-		mProgressTextView.setText(getString(R.string.processing));
-	}
-
-	@Override
-	public void showError(String error) {
-		final Snackbar snackbar = Snackbar.make(mMainView, R.string.error + ": " + error, Snackbar.LENGTH_INDEFINITE);
-		snackbar.setAction(R.string.ok, new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				snackbar.dismiss();
-			}
-		}).show();
 	}
 
 	private void toggleShow(int visibility) {
@@ -276,16 +273,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	}
 
 	private void toggleEnable(boolean enabled) {
-		mGalleryButton.setEnabled(enabled);
-		mCameraButton.setEnabled(enabled);
+		Observable.create(new Observable.OnSubscribe<Boolean>() {
+			@Override
+			public void call(Subscriber<? super Boolean> subscriber) {
+				subscriber.onNext(enabled);
+			}
+		})
+		.subscribeOn(Schedulers.newThread())
+		.observeOn(AndroidSchedulers.mainThread())
+		.subscribe(mBooleanObserver);
 	}
 
-	protected void restartAsyncTask(String... params) {
-		if (mAsyncTask != null) {
-			mAsyncTask.cancel(true);
-			mAsyncTask.setResultListener(null);
+	@Override
+	public void onCompleted() {
+		hideLoading();
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		new AlertDialog.Builder(this)
+				.setCancelable(true)
+				.setTitle(getString(R.string.error))
+				.setMessage(e.getMessage())
+				.setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
+				.show();
+	}
+
+	@Override
+	public void onNext(List<TextAnnotation> textAnnotations) {
+		if (textAnnotations != null && textAnnotations.size() != 0) {
+			TextAnnotation result = textAnnotations.get(0);
+			String content = result.getContent();
+
+			Note note = mNotePresenter.createOrUpdate(new Note(0, new Date(), mNoteName, content));
+
+			Intent intent = new Intent(MainActivity.this, NoteActivity.class);
+			intent.putExtra(NoteActivity.EXTRA_NOTE_ID, note.getId());
+			intent.putExtra(NoteActivity.EXTRA_FROM, NoteActivity.MAIN);
+			startActivity(intent);
 		}
-		mAsyncTask = new VisionAsyncTask(this, this);
-		mAsyncTask.execute(params);
 	}
 }

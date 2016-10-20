@@ -1,33 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
 	<include layout="@layout/item_actionbar" />
 
-	<LinearLayout
+	<FrameLayout
+		android:id="@+id/activity_note_frame_layout_note_container"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
-
-		<EditText
-			android:id="@+id/activity_note_edit_text_name"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:hint="@string/name" />
-
-		<EditText
-			android:id="@+id/activity_note_edit_text_content"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:autoLink="all"
-			android:gravity="left"
-			android:hint="@string/content"
-			android:linksClickable="true"
-			android:textSize="14sp"
-			tools:ignore="RtlHardcoded" />
-	</LinearLayout>
+		android:layout_height="match_parent" />
 </LinearLayout>
