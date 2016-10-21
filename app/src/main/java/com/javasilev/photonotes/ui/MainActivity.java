@@ -294,6 +294,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				.setMessage(e.getMessage())
 				.setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
 				.show();
+		mVisionPresenter.stop();
+		hideLoading();
 	}
 
 	@Override
