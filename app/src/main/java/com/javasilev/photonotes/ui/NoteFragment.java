@@ -77,6 +77,14 @@ public class NoteFragment extends Fragment {
 		saveNote();
 	}
 
+	public String getName() {
+		return mNote.getName();
+	}
+
+	public String getText() {
+		return mNote.getText();
+	}
+
 	public void saveNote() {
 		if (mNote != null) {
 			Note note = new Note(

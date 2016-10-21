@@ -1,5 +1,6 @@
 package com.javasilev.photonotes.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -62,6 +63,9 @@ public class NoteActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.activity_notes_share:
+				startShare();
+				return super.onOptionsItemSelected(item);
 			case R.id.activity_notes_menu_save:
 				mFragment.saveNote();
 				return super.onOptionsItemSelected(item);
@@ -72,6 +76,16 @@ public class NoteActivity extends AppCompatActivity {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void startShare() {
+		String header = mFragment.getName();
+		String text = mFragment.getText();
+		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sharingIntent.setType("text/plain");
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, header);
+		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+		startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
 	}
 
 	private void delete() {

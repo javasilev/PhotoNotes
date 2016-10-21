@@ -26,6 +26,7 @@
 	<string name="wrong_api">Неправильный ключ API</string>
 	<string name="no_entries">Нет заметок</string>
 	<string name="check_inet">Проверьте подключение к интернету.</string>
+	<string name="share">Поделиться</string>
 
 	<string-array name="lang_entries">
 		<item>Белорусский</item>
