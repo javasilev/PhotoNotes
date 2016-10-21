@@ -31,6 +31,7 @@
 	<string name="key_api_summary">Your personal key for Google Cloud Vision API (required)</string>
 	<string name="wrong_api">Wrong API key</string>
 	<string name="no_entries">No entries</string>
+	<string name="check_inet">Check Internet connection.</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>

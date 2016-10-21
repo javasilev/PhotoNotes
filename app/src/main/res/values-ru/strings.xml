@@ -25,6 +25,7 @@
 	<string name="key_api_summary">Ваш персональный ключ для использования Google Cloud Vision API (обязателен)</string>
 	<string name="wrong_api">Неправильный ключ API</string>
 	<string name="no_entries">Нет заметок</string>
+	<string name="check_inet">Проверьте подключение к интернету.</string>
 
 	<string-array name="lang_entries">
 		<item>Белорусский</item>

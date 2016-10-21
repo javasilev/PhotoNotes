@@ -1,6 +1,8 @@
 package com.javasilev.photonotes.presenters;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +40,8 @@ public class VisionPresenter {
 
 	private Subscription mSubscription;
 
+	private boolean mInternetAvailable;
+
 	public VisionPresenter(Observer<List<Response>> visionObserver, Context context) {
 		mVisionObserver = visionObserver;
 		mContext = context;
@@ -50,6 +54,10 @@ public class VisionPresenter {
 	}
 
 	public void load(final Uri uri) {
+		checkInternet(uri);
+	}
+
+	private void load(final Uri uri, final boolean internetAvailable) {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 		final Set<String> langHints = prefs.getStringSet(mContext.getString(R.string.key_lang), Collections.singleton("ru"));
@@ -61,8 +69,12 @@ public class VisionPresenter {
 				Observable.create(new Observable.OnSubscribe<VisionRequest>() {
 					@Override
 					public void call(Subscriber<? super VisionRequest> subscriber) {
-						subscriber.onNext(createRequest(uri, langHints));
-						subscriber.onCompleted();
+						if (internetAvailable) {
+							subscriber.onNext(createRequest(uri, langHints));
+							subscriber.onCompleted();
+						} else {
+							subscriber.onError(new Exception(mContext.getString(R.string.check_inet)));
+						}
 					}
 				})
 				.subscribeOn(Schedulers.newThread())
@@ -91,6 +103,39 @@ public class VisionPresenter {
 		return !(mSubscription == null || mSubscription.isUnsubscribed());
 	}
 
+	private void checkInternet(final Uri uri) {
+		Observable.create(new Observable.OnSubscribe<InetAddress>() {
+			@Override
+			public void call(Subscriber<? super InetAddress> subscriber) {
+				try {
+					subscriber.onNext(InetAddress.getByName("google.com"));
+				} catch (UnknownHostException e) {
+					setInternetAvailable(false);
+				} finally {
+					subscriber.onCompleted();
+				}
+			}
+		})
+		.subscribeOn(Schedulers.newThread())
+		.observeOn(AndroidSchedulers.mainThread())
+		.subscribe(new Observer<InetAddress>() {
+			@Override
+			public void onCompleted() {
+				load(uri, isInternetAvailable());
+			}
+
+			@Override
+			public void onError(Throwable e) {
+				setInternetAvailable(false);
+			}
+
+			@Override
+			public void onNext(InetAddress inetAddress) {
+				setInternetAvailable(!inetAddress.toString().isEmpty());
+			}
+		});
+	}
+
 	private VisionRequest createRequest(Uri uri, Set<String> langHints) {
 		Request request = new VisionRequestBuilder(mContext)
 				.addImage(uri)
@@ -98,5 +143,13 @@ public class VisionPresenter {
 				.addImageContext(langHints.toArray(new String[langHints.size()]))
 				.create();
 		return new VisionRequest(Collections.singletonList(request));
+	}
+
+	private boolean isInternetAvailable() {
+		return mInternetAvailable;
+	}
+
+	private void setInternetAvailable(boolean internetAvailable) {
+		mInternetAvailable = internetAvailable;
 	}
 }
