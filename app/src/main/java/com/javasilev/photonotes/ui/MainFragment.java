@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import com.javasilev.photonotes.R;
 
@@ -20,10 +20,10 @@ import rx.Observer;
 
 public class MainFragment extends Fragment implements Observer<Boolean> {
 	@BindView(R.id.fragment_main_button_camera)
-	ImageButton mCameraButton;
+	Button mCameraButton;
 
 	@BindView(R.id.fragment_main_button_gallery)
-	ImageButton mGalleryButton;
+	Button mGalleryButton;
 
 	@Nullable
 	@Override

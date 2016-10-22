@@ -2,6 +2,8 @@ package com.javasilev.photonotes;
 
 import android.app.Application;
 
+import com.javasilev.photonotes.utils.FontsOverride;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -18,5 +20,8 @@ public class PhotoNotes extends Application {
 		Realm.init(this);
 		RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
 		Realm.setDefaultConfiguration(realmConfiguration);
+
+		FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Roboto-Light.ttf");
+		FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Roboto-Light.ttf");
 	}
 }

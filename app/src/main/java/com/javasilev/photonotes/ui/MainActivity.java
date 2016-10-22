@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	Button mCancelButton;
 
 	@BindView(R.id.activity_main_toolbar)
-	Toolbar mActionBar;
+	Toolbar mToolbar;
 
 	@BindView(CONTAINER)
 	ViewPager mViewPager;
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 
-		setSupportActionBar(mActionBar);
+		setSupportActionBar(mToolbar);
 
 		setupViewPager(mViewPager);
 		mTabLayout.setupWithViewPager(mViewPager);

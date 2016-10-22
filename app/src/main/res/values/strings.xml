@@ -33,6 +33,11 @@
 	<string name="no_entries">No entries</string>
 	<string name="check_inet">Check Internet connection.</string>
 	<string name="share">Share</string>
+	<string name="take_photo">Take a photo or choose from gallery:</string>
+	<string name="to_start_detecting">To start detecting</string>
+	<string name="take_a_photo">Take a photo</string>
+	<string name="or">or</string>
+	<string name="choose_from_gallery">Choose from gallery</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>

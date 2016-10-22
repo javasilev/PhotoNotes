@@ -27,6 +27,11 @@
 	<string name="no_entries">Нет заметок</string>
 	<string name="check_inet">Проверьте подключение к интернету.</string>
 	<string name="share">Поделиться</string>
+	<string name="take_photo">Сделайте фото или выберите из галереи:</string>
+	<string name="to_start_detecting">Для начала распознавания</string>
+	<string name="take_a_photo">Сделайте фото</string>
+	<string name="or">или</string>
+	<string name="choose_from_gallery">Выберите из галереи</string>
 
 	<string-array name="lang_entries">
 		<item>Белорусский</item>
