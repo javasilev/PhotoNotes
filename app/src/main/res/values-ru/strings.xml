@@ -17,7 +17,7 @@
 	<string name="name">Название:</string>
 	<string name="nothing_detected">Ничего не распознано</string>
 	<string name="preferences">Настройки</string>
-	<string name="processing">Обработка...</string>
+	<string name="processing">Обработка…</string>
 	<string name="save">Сохранить</string>
 	<string name="saved_notes">Сохраненные заметки</string>
 	<string name="languages">Выберите языки</string>
@@ -32,6 +32,7 @@
 	<string name="take_a_photo">Сделайте фото</string>
 	<string name="or">или</string>
 	<string name="choose_from_gallery">Выберите из галереи</string>
+	<string name="select">Выберите изображение</string>
 
 	<string-array name="lang_entries">
 		<item>Белорусский</item>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/minor"
+				android:gravity="center"
+				android:text="@string/to_start_detecting"
+				android:textColor="@color/colorPrimary"
+				android:textSize="16sp" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:gravity="center"
+				android:paddingLeft="@dimen/modest"
+				android:paddingRight="@dimen/modest"
+				android:orientation="horizontal">
+
+				<Button
+					android:id="@+id/fragment_start_detecting_button_camera"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:drawableTop="@drawable/ic_camera_alt_black_24dp"
+					android:padding="@dimen/modest"
+					android:text="@string/take_a_photo"
+					android:textColor="@color/colorPrimary"
+					android:textSize="20sp"
+					android:lines="2"
+					tools:ignore="RtlHardcoded" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:padding="@dimen/minor"
+					android:text="@string/or"
+					android:textColor="@color/colorPrimary"
+					android:textSize="16sp" />
+
+				<Button
+					android:id="@+id/fragment_start_detecting_button_gallery"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:drawableTop="@drawable/ic_insert_photo_black_24dp"
+					android:padding="@dimen/modest"
+					android:text="@string/choose_from_gallery"
+					android:textColor="@color/colorPrimary"
+					android:textSize="20sp"
+					android:lines="2"
+					tools:ignore="RtlHardcoded" />
+			</LinearLayout>
+		</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

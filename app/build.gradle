@@ -35,6 +35,7 @@ dependencies {
     final GSON_VERSION = '2.7'
     final RETROFIT_VERSION = '2.1.0'
     final RX_VERSION = '1.2.1'
+    final MOXY_VERSION = '1.0.3'
 
     /* support libraries */
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
@@ -62,6 +63,12 @@ dependencies {
     /* Rx */
     compile "io.reactivex:rxjava:$RX_VERSION"
     compile "io.reactivex:rxandroid:$RX_VERSION"
+
+    /* MVP */
+    compile "com.arello-mobile:moxy:$MOXY_VERSION"
+    compile "com.arello-mobile:moxy-app-compat:$MOXY_VERSION"
+    provided "com.arello-mobile:moxy-compiler:$MOXY_VERSION"
+    compile "com.arello-mobile:moxy-android:$MOXY_VERSION"
 
     /* Tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

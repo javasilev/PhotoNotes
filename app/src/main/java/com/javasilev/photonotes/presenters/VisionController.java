@@ -34,7 +34,8 @@ import rx.schedulers.Schedulers;
  * Created by Aleksei Vasilev.
  */
 
-public class VisionPresenter {
+@SuppressWarnings("WeakerAccess")
+public class VisionController {
 	private Observer<List<Response>> mVisionObserver;
 	private Context mContext;
 
@@ -42,7 +43,7 @@ public class VisionPresenter {
 
 	private boolean mInternetAvailable;
 
-	public VisionPresenter(Observer<List<Response>> visionObserver, Context context) {
+	public VisionController(Observer<List<Response>> visionObserver, Context context) {
 		mVisionObserver = visionObserver;
 		mContext = context;
 	}
@@ -77,30 +78,26 @@ public class VisionPresenter {
 						}
 					}
 				})
-				.subscribeOn(Schedulers.newThread())
-				.map(visionRequest -> {
-					VisionResponse response = new VisionResponse();
-					try {
-						retrofit2.Response retrofitResponse = VisionService.getInstance(mContext).createVisionClient()
-								.getVisionResponse(visionRequest, fields, apiKey)
-								.execute();
-						if (retrofitResponse.code() == 400) {
-							response = new VisionResponse(Collections.singletonList(new Response(new Error(400, mContext.getString(R.string.wrong_api)), new ArrayList<>())));
-						} else {
-							response = (VisionResponse) retrofitResponse.body();
-						}
-					} catch (IOException e) {
-						response = new VisionResponse(Collections.singletonList(new Response(null, new ArrayList<>())));
-					}
-					return response;
-				})
-				.map(VisionResponse::getResponses)
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(mVisionObserver);
-	}
-
-	public boolean isInProcess() {
-		return !(mSubscription == null || mSubscription.isUnsubscribed());
+						.subscribeOn(Schedulers.newThread())
+						.map(visionRequest -> {
+							VisionResponse response = new VisionResponse();
+							try {
+								retrofit2.Response retrofitResponse = VisionService.getInstance(mContext).createVisionClient()
+										.getVisionResponse(visionRequest, fields, apiKey)
+										.execute();
+								if (retrofitResponse.code() == 400) {
+									response = new VisionResponse(Collections.singletonList(new Response(new Error(400, mContext.getString(R.string.wrong_api)), new ArrayList<>())));
+								} else {
+									response = (VisionResponse) retrofitResponse.body();
+								}
+							} catch (IOException e) {
+								response = new VisionResponse(Collections.singletonList(new Response(null, new ArrayList<>())));
+							}
+							return response;
+						})
+						.map(VisionResponse::getResponses)
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribe(mVisionObserver);
 	}
 
 	private void checkInternet(final Uri uri) {
@@ -116,24 +113,24 @@ public class VisionPresenter {
 				}
 			}
 		})
-		.subscribeOn(Schedulers.newThread())
-		.observeOn(AndroidSchedulers.mainThread())
-		.subscribe(new Observer<InetAddress>() {
-			@Override
-			public void onCompleted() {
-				load(uri, isInternetAvailable());
-			}
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new Observer<InetAddress>() {
+					@Override
+					public void onCompleted() {
+						load(uri, isInternetAvailable());
+					}
 
-			@Override
-			public void onError(Throwable e) {
-				setInternetAvailable(false);
-			}
+					@Override
+					public void onError(Throwable e) {
+						setInternetAvailable(false);
+					}
 
-			@Override
-			public void onNext(InetAddress inetAddress) {
-				setInternetAvailable(!inetAddress.toString().isEmpty());
-			}
-		});
+					@Override
+					public void onNext(InetAddress inetAddress) {
+						setInternetAvailable(!inetAddress.toString().isEmpty());
+					}
+				});
 	}
 
 	private VisionRequest createRequest(Uri uri, Set<String> langHints) {

@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,21 +13,26 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 import com.javasilev.photonotes.R;
 import com.javasilev.photonotes.adapters.NoteAdapter;
 import com.javasilev.photonotes.adapters.base.CollectionAdapter;
 import com.javasilev.photonotes.models.Note;
 import com.javasilev.photonotes.presenters.NoteListPresenter;
+import com.javasilev.photonotes.views.NoteListView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observer;
 
 /**
  * Created by Aleksei Vasilev.
  */
 
-public class NoteListFragment extends Fragment implements Observer<List<Note>>, CollectionAdapter.OnItemClickListener<Note> {
+public class NoteListFragment extends MvpAppCompatFragment implements NoteListView, CollectionAdapter.OnItemClickListener<Note> {
+	public static final String NOTE_LIST_PRESENTER_TAG = "NoteListPresenterTag";
+
 	@BindView(R.id.fragment_list_progress_bar_loading)
 	ProgressBar mLoadingBar;
 
@@ -41,8 +45,10 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 	@BindView(R.id.fragment_list_text_view_empty)
 	TextView mEmptyText;
 
+	@InjectPresenter(type = PresenterType.GLOBAL, tag = NOTE_LIST_PRESENTER_TAG)
+	NoteListPresenter mPresenter;
+
 	private NoteAdapter mAdapter;
-	private NoteListPresenter mPresenter;
 
 	@Nullable
 	@Override
@@ -57,19 +63,16 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 
 		mAdapter = new NoteAdapter(getContext(), this);
 		initRecyclerView();
-
-		mPresenter = new NoteListPresenter(this);
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		startLoading();
 	}
 
 	private void startLoading() {
 		mPresenter.loadNotes();
-		switchVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -82,24 +85,41 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 	@Override
 	public void onDelete(int position, long itemId) {
 		mAdapter.removeItem(position);
-		mPresenter.deleteNote(itemId);
+		mPresenter.userDeleteNote(itemId);
 		setEmptyState(mAdapter.getItemCount() == 0);
 	}
 
 	@Override
-	public void onCompleted() {
-		switchVisibility(View.GONE);
+	public void showProgress() {
+		mLoadingBar.setVisibility(View.VISIBLE);
+		mProgressTextView.setVisibility(View.VISIBLE);
 	}
 
 	@Override
-	public void onError(Throwable e) {
-
+	public void hideProgress() {
+		mLoadingBar.setVisibility(View.GONE);
+		mProgressTextView.setVisibility(View.GONE);
 	}
 
 	@Override
-	public void onNext(List<Note> notes) {
-		mAdapter.setCollection(notes);
-		setEmptyState(notes.size() == 0);
+	public void disableList() {
+		mDataRecyclerView.setEnabled(false);
+	}
+
+	@Override
+	public void enableList() {
+		mDataRecyclerView.setEnabled(true);
+	}
+
+	@Override
+	public void setList(List<Note> noteList) {
+		mAdapter.setCollection(noteList);
+		setEmptyState(noteList.size() == 0);
+	}
+
+	@Override
+	public void showError(String message) {
+
 	}
 
 	private void setEmptyState(boolean empty) {
@@ -111,8 +131,7 @@ public class NoteListFragment extends Fragment implements Observer<List<Note>>, 
 		mDataRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 	}
 
-	private void switchVisibility(int visibilityState) {
-		mLoadingBar.setVisibility(visibilityState);
-		mProgressTextView.setVisibility(visibilityState);
+	public NoteListPresenter getPresenter() {
+		return mPresenter;
 	}
 }

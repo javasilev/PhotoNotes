@@ -1,7 +1,6 @@
 package com.javasilev.photonotes;
 
-import android.app.Application;
-
+import com.arellomobile.mvp.MvpApplication;
 import com.javasilev.photonotes.utils.FontsOverride;
 
 import io.realm.Realm;
@@ -11,7 +10,7 @@ import io.realm.RealmConfiguration;
  * Created by Aleksei Vasilev.
  */
 
-public class PhotoNotes extends Application {
+public class PhotoNotes extends MvpApplication {
 
 	@Override
 	public void onCreate() {

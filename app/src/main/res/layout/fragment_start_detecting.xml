@@ -6,60 +6,58 @@
 	android:layout_height="match_parent"
 	app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-	<LinearLayout
+	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/minor"
-			android:layout_marginTop="@dimen/minor"
-			android:gravity="center"
-			android:text="@string/to_start_detecting"
-			android:textColor="@color/colorPrimary"
-			android:textSize="16sp" />
+		android:layout_height="match_parent">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:gravity="center_vertical"
-			android:orientation="horizontal">
-
-			<Button
-				android:id="@+id/fragment_main_button_camera"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:drawableTop="@drawable/ic_camera_alt_black_24dp"
-				android:padding="@dimen/minor"
-				android:text="@string/take_a_photo"
-				android:lines="2"
-				android:textColor="@color/colorPrimary"
-				android:textSize="24sp" />
+			android:paddingLeft="@dimen/minor"
+			android:paddingRight="@dimen/minor"
+			android:orientation="vertical">
 
 			<TextView
-				android:layout_width="wrap_content"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_gravity="center"
-				android:layout_margin="@dimen/minor"
+				android:layout_marginTop="@dimen/minor"
+				android:gravity="center"
+				android:text="@string/to_start_detecting"
+				android:textColor="@color/colorPrimary"
+				android:textSize="16sp" />
+
+			<Button
+				android:id="@+id/fragment_start_detecting_button_camera"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+				android:padding="@dimen/minor"
+				android:text="@string/take_a_photo"
+				android:textColor="@color/colorPrimary"
+				android:textSize="20sp"
+				android:lines="3"
+				tools:ignore="RtlHardcoded" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
 				android:gravity="center"
 				android:text="@string/or"
 				android:textColor="@color/colorPrimary"
 				android:textSize="16sp" />
 
 			<Button
-				android:id="@+id/fragment_main_button_gallery"
-				android:layout_width="0dp"
+				android:id="@+id/fragment_start_detecting_button_gallery"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:lines="2"
-				android:drawableTop="@drawable/ic_insert_photo_black_24dp"
+				android:drawableRight="@drawable/ic_insert_photo_black_24dp"
 				android:padding="@dimen/minor"
 				android:text="@string/choose_from_gallery"
 				android:textColor="@color/colorPrimary"
-				android:textSize="24sp" />
+				android:textSize="20sp"
+				android:lines="3"
+				tools:ignore="RtlHardcoded" />
 		</LinearLayout>
-	</LinearLayout>
+	</FrameLayout>
+
 </android.support.v4.widget.NestedScrollView>

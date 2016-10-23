@@ -2,60 +2,52 @@ package com.javasilev.photonotes.presenters;
 
 import java.util.List;
 
+import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.MvpPresenter;
 import com.javasilev.photonotes.data.RealmDataSource;
 import com.javasilev.photonotes.models.Note;
+import com.javasilev.photonotes.views.NoteListView;
 
-import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Aleksei Vasilev.
  */
 
-public class NoteListPresenter {
+@InjectViewState
+public class NoteListPresenter extends MvpPresenter<NoteListView> implements Observer<List<Note>> {
 	private RealmDataSource mDataSource = RealmDataSource.getInstance();
-	private Observer<List<Note>> mNoteObserver;
-
-	public NoteListPresenter(Observer<List<Note>> noteObserver) {
-		mNoteObserver = noteObserver;
-	}
+	private NoteListController mController = new NoteListController(this);
 
 	public void loadNotes() {
-		load(null);
+		getViewState().showProgress();
+		getViewState().disableList();
+		mController.loadNotes();
 	}
 
-	public void findNotes(final String searchQuery) {
-		load(searchQuery);
+	public void findNotes(String query) {
+		getViewState().showProgress();
+		getViewState().disableList();
+		mController.findNotes(query);
 	}
 
-	private void load(final String query) {
-		Observable.create(
-				new Observable.OnSubscribe<List<Note>>() {
-					@Override
-					public void call(Subscriber<? super List<Note>> subscriber) {
-						try {
-							List<Note> notes;
-							if (query != null) {
-								notes = mDataSource.find(query);
-							} else {
-								notes = mDataSource.getAll();
-							}
-							subscriber.onNext(notes);
-						} catch (Exception e) {
-							subscriber.onError(e);
-						}
-
-						subscriber.onCompleted();
-					}
-				})
-				.subscribeOn(AndroidSchedulers.mainThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(mNoteObserver);
+	public void userDeleteNote(long id) {
+		mDataSource.deleteItem(id);
 	}
 
-	public void deleteNote(long noteId) {
-		mDataSource.deleteItem(noteId);
+	@Override
+	public void onCompleted() {
+		getViewState().hideProgress();
+		getViewState().enableList();
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		getViewState().showError(e.getMessage());
+	}
+
+	@Override
+	public void onNext(List<Note> notes) {
+		getViewState().setList(notes);
 	}
 }
