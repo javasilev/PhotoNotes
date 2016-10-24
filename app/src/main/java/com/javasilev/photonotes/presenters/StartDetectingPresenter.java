@@ -23,7 +23,7 @@ import rx.Observer;
  */
 @InjectViewState
 public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> implements Observer<List<Response>> {
-	private static final int CAMERA = R.id.fragment_start_detecting_button_camera;
+	public static final int CAMERA = R.id.fragment_start_detecting_button_camera;
 	private static final int GALLERY = R.id.fragment_start_detecting_button_gallery;
 
 	private String mItemName;

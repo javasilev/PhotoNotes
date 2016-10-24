@@ -21,6 +21,7 @@ public interface StartDetectingView extends MvpView {
 	void showProgress();
 	void hideProgress();
 
+	@StateStrategyType(SkipStrategy.class)
 	void showError(String errorMessage);
 
 	@StateStrategyType(SkipStrategy.class)

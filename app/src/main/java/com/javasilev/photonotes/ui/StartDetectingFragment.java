@@ -131,12 +131,11 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (PermissionUtils.permissionGranted(
 				requestCode,
 				CAMERA_PERMISSIONS_REQUEST,
 				grantResults)) {
-			startCamera();
+			mStartDetectingPresenter.userClickControl(StartDetectingPresenter.CAMERA);
 		}
 	}
 

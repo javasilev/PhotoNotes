@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.javasilev.photonotes.models.Note;
 
@@ -21,5 +22,6 @@ public interface NoteListView extends MvpView {
 
 	void setList(List<Note> noteList);
 
+	@StateStrategyType(SkipStrategy.class)
 	void showError(String message);
 }
