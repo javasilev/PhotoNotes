@@ -1,5 +1,6 @@
 package com.javasilev.photonotes.presenters;
 
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.javasilev.photonotes.models.response.Response;
 import com.javasilev.photonotes.models.response.TextAnnotation;
 import com.javasilev.photonotes.views.StartDetectingView;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 
 /**
@@ -63,7 +65,16 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 	@Override
 	public void onError(Throwable e) {
 		getViewState().hideProgress();
-		getViewState().showError(e.getMessage());
+		if (e instanceof UnknownHostException) {
+			getViewState().showError(mContext.getString(R.string.check_inet));
+		} else if (e instanceof HttpException){
+			int errorCode = ((HttpException) e).code();
+			if (errorCode == 400 || errorCode == 403) {
+				getViewState().showError(mContext.getString(R.string.wrong_api));
+			}
+		} else {
+			getViewState().showError(e.getMessage());
+		}
 	}
 
 	@Override
@@ -71,7 +82,7 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 		if (responses != null && responses.size() > 0) {
 			Response response = responses.get(0);
 			Error error = response.getError();
-			if (error != null && error.getCode() == 400) {
+			if (error != null) {
 				onError(new Exception(error.getMessage()));
 				return;
 			}

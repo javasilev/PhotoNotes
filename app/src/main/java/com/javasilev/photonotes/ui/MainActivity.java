@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.javasilev.photonotes.R;
 import com.javasilev.photonotes.adapters.MainPagerAdapter;
 import com.javasilev.photonotes.models.Note;
@@ -28,6 +29,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 	public static final int CONTAINER = R.id.activity_main_viewpager;
+	public static final String EXTRA_ACCOUNT = "extra_account";
 
 	public static final int NOTES_POSITION = 1;
 
@@ -43,6 +45,8 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 	@InjectPresenter(type = PresenterType.GLOBAL, tag = NoteListFragment.NOTE_LIST_PRESENTER_TAG)
 	NoteListPresenter mPresenter;
 
+	private GoogleSignInAccount mAccount;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,6 +57,9 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 
 		setupViewPager(mViewPager);
 		mTabLayout.setupWithViewPager(mViewPager);
+
+//		mAccount = (GoogleSignInAccount) getIntent().getExtras().get(EXTRA_ACCOUNT);
+
 	}
 
 	@Override

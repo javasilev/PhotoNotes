@@ -10,7 +10,7 @@ import io.realm.RealmConfiguration;
  * Created by Aleksei Vasilev.
  */
 
-public class PhotoNotes extends MvpApplication {
+public class PhotoNotesApplication extends MvpApplication {
 
 	@Override
 	public void onCreate() {

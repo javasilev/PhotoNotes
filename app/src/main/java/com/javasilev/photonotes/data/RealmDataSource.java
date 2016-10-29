@@ -43,32 +43,32 @@ public class RealmDataSource implements DataSource<Note> {
 
 	@Override
 	public Note getItem(long itemId) {
-		return mRealm.where(Note.class).equalTo("id", itemId).findFirst();
+		return mRealm.where(Note.class).equalTo(Note.Columns.ID, itemId).findFirst();
 	}
 
 	@Override
 	public void deleteItem(long itemId) {
 		mRealm.beginTransaction();
-		mRealm.where(Note.class).equalTo("id", itemId).findFirst().deleteFromRealm();
+		mRealm.where(Note.class).equalTo(Note.Columns.ID, itemId).findFirst().deleteFromRealm();
 		mRealm.commitTransaction();
 	}
 
 	@Override
 	public List<Note> getAll() {
-		return mRealm.where(Note.class).findAllSorted("creationDate", Sort.DESCENDING);
+		return mRealm.where(Note.class).findAllSorted(Note.Columns.DATE, Sort.DESCENDING);
 	}
 
 	@Override
 	public List<Note> find(String searchQuery) {
 		return mRealm.where(Note.class)
-				.contains("nameLowercased", searchQuery.toLowerCase())
+				.contains(Note.Columns.NAME_LOWERCASE, searchQuery.toLowerCase())
 				.or()
-				.contains("textLowercased", searchQuery.toLowerCase())
-				.findAllSorted("creationDate", Sort.DESCENDING);
+				.contains(Note.Columns.TEXT_LOWERCASE, searchQuery.toLowerCase())
+				.findAllSorted(Note.Columns.DATE, Sort.DESCENDING);
 	}
 
 	private long getNextKey() {
-		Number maxId = mRealm.where(Note.class).max("id");
+		Number maxId = mRealm.where(Note.class).max(Note.Columns.ID);
 
 		return maxId == null ? 1 : maxId.longValue() + 1;
 	}

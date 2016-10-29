@@ -57,4 +57,5 @@
 		<item>uk</item>
 		<item>uz</item>
 	</string-array>
+	<string name="title_activity_login">Вход</string>
 </resources>

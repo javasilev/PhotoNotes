@@ -63,4 +63,7 @@
 		<item>uk</item>
 		<item>uz</item>
 	</string-array>
+
+	<string name="title_activity_login">Sign in</string>
+	<string name="web_app_api_key"></string>
 </resources>
