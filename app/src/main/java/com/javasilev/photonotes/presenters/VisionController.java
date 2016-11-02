@@ -17,6 +17,7 @@ import com.javasilev.photonotes.models.request.VisionRequestBuilder;
 import com.javasilev.photonotes.models.response.Response;
 import com.javasilev.photonotes.models.response.VisionResponse;
 import com.javasilev.photonotes.network.VisionService;
+import com.javasilev.photonotes.utils.KeyManager;
 
 import rx.Observable;
 import rx.Observer;
@@ -30,6 +31,8 @@ import rx.schedulers.Schedulers;
 
 @SuppressWarnings("WeakerAccess")
 public class VisionController {
+	private static final String TAG = "PN_VisionContrlr";
+
 	private Observer<List<Response>> mVisionObserver;
 	private Context mContext;
 
@@ -50,7 +53,7 @@ public class VisionController {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 		final Set<String> langHints = prefs.getStringSet(mContext.getString(R.string.key_lang), Collections.singleton("ru"));
-		final String apiKey = prefs.getString(mContext.getString(R.string.key_api), "INSERT YOUR API_KEY HERE");
+		final String apiKey = KeyManager.getKey();
 
 		final String fields = "responses(error,textAnnotations)";
 

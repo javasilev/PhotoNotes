@@ -8,9 +8,9 @@
 	<string name="content">Content:</string>
 	<string name="processing">Processing…</string>
 	<string name="cancel">Cancel</string>
-	<string name="all_notes">Notes</string>
+	<string name="all_notes">All notes</string>
 	<string name="preferences">Preferences</string>
-	<string name="about" translatable="false">About</string>
+	<string name="about">About</string>
 	<string name="save">Save</string>
 	<string name="delete">Delete</string>
 	<string name="key_lang" translatable="false">key_lang</string>
@@ -18,14 +18,14 @@
 	<string name="action_search">Search</string>
 	<string name="error">Error</string>
 	<string name="nothing_detected">Nothing detected</string>
-	<string name="Start_OCR">Start OCR</string>
+	<string name="detect">Detect</string>
 	<string name="saved_notes">Saved notes</string>
 	<string name="edit_note">Edit note</string>
 	<string name="about_text">Application for recognition of text from images.\nUsed Google Cloud Vision Api.</string>
 	<string name="version" translatable="false">version 1.0</string>
 	<string name="author_aleksei_vasilev">author: Aleksei Vasilev</string>
 	<string name="photonotes_javasilev_com" translatable="false">photonotes@javasilev.com</string>
-	<string name="languages">Select languages</string>
+	<string name="languages">Detect languages</string>
 	<string name="key_api" translatable="false">key_api</string>
 	<string name="enter_key_api">Enter API key</string>
 	<string name="key_api_summary">Your personal key for Google Cloud Vision API (required)</string>
@@ -39,6 +39,9 @@
 	<string name="or">or</string>
 	<string name="choose_from_gallery">Choose from gallery</string>
 	<string name="select">Select an image</string>
+	<string name="open_drawer">open drawer</string>
+	<string name="close_drawer">close drawer</string>
+	<string name="select_languages">Select languages</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>
@@ -63,7 +66,4 @@
 		<item>uk</item>
 		<item>uz</item>
 	</string-array>
-
-	<string name="title_activity_login">Sign in</string>
-	<string name="web_app_api_key"></string>
 </resources>

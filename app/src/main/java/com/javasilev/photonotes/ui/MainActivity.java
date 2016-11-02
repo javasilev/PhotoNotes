@@ -2,50 +2,53 @@ package com.javasilev.photonotes.ui;
 
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.PresenterType;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.javasilev.photonotes.R;
-import com.javasilev.photonotes.adapters.MainPagerAdapter;
-import com.javasilev.photonotes.models.Note;
-import com.javasilev.photonotes.presenters.NoteListPresenter;
-import com.javasilev.photonotes.views.NoteListView;
+import com.javasilev.photonotes.presenters.MainActivityPresenter;
+import com.javasilev.photonotes.views.MainActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends MvpAppCompatActivity implements NoteListView {
-	public static final int CONTAINER = R.id.activity_main_viewpager;
-	public static final String EXTRA_ACCOUNT = "extra_account";
-
-	public static final int NOTES_POSITION = 1;
+public class MainActivity extends MvpAppCompatActivity implements MainActivityView {
+	public static final int CONTAINER = R.id.activity_main_frame_layout_container;
+	private static final String TAG = "PN_MainActivity";
+	private static final String FRAGMENT_TAG = "fragmrnt";
 
 	@BindView(R.id.activity_main_toolbar)
 	Toolbar mToolbar;
 
-	@BindView(CONTAINER)
-	ViewPager mViewPager;
+	@BindView(R.id.activity_main_drawer)
+	DrawerLayout mDrawerLayout;
 
-	@BindView(R.id.activity_main_tabs)
-	TabLayout mTabLayout;
+	@BindView(R.id.activity_main_navigation_view)
+	NavigationView mNavigationView;
 
-	@InjectPresenter(type = PresenterType.GLOBAL, tag = NoteListFragment.NOTE_LIST_PRESENTER_TAG)
-	NoteListPresenter mPresenter;
+	@InjectPresenter
+	MainActivityPresenter mPresenter;
 
-	private GoogleSignInAccount mAccount;
+	private StartDetectingFragment mStartFragment = new StartDetectingFragment();
+	private NoteListFragment mNoteListFragment = new NoteListFragment();
+	private PrefsFragment mPrefsFragment = new PrefsFragment();
+	private AboutFragment mAboutFragment = new AboutFragment();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +56,38 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 
+		mNoteListFragment.onCreate(null);
+
 		setSupportActionBar(mToolbar);
 
-		setupViewPager(mViewPager);
-		mTabLayout.setupWithViewPager(mViewPager);
+		final ActionBar ab = getSupportActionBar();
+		assert ab != null;
+		ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+		ab.setDisplayHomeAsUpEnabled(true);
 
-//		mAccount = (GoogleSignInAccount) getIntent().getExtras().get(EXTRA_ACCOUNT);
+		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				mPresenter.openDrawer();
+			}
 
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				mPresenter.closeDrawer();
+			}
+		};
+		mDrawerLayout.addDrawerListener(toggle);
+
+		mNavigationView.setNavigationItemSelectedListener(mPresenter);
+
+		getSupportFragmentManager().addOnBackStackChangedListener(this::doOnBackStackChanged);
+
+		FragmentManager manager = getSupportFragmentManager();
+		for (int i = 0; i < manager.getBackStackEntryCount(); i++) {
+			manager.popBackStack();
+		}
 	}
 
 	@Override
@@ -69,7 +97,7 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 		final MenuItem searchItem = menu.findItem(R.id.activity_main_menu_action_search);
 		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-		searchView.setOnSearchClickListener(v -> mViewPager.setCurrentItem(NOTES_POSITION));
+		searchView.setOnSearchClickListener(v -> mPresenter.setNoteListFragment());
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -85,12 +113,12 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 			}
 
 			private void find(String query) {
-				mPresenter.findNotes(query);
+				mNoteListFragment.findNotes(query);
 			}
 		});
 
 		searchView.setOnCloseListener(() -> {
-			mPresenter.loadNotes();
+			mNoteListFragment.loadNotes();
 			return false;
 		});
 
@@ -98,24 +126,12 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.activity_main_menu_prefs:
-				startActivity(new Intent(MainActivity.this, PrefsActivity.class));
-				return super.onOptionsItemSelected(item);
-			case R.id.activity_main_menu_about:
-				startActivity(new Intent(MainActivity.this, AboutActivity.class));
-				return super.onOptionsItemSelected(item);
-			default:
-				return super.onOptionsItemSelected(item);
+	public void onBackPressed() {
+		if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+			mPresenter.closeDrawer();
+		} else {
+			mPresenter.back();
 		}
-	}
-
-	private void setupViewPager(ViewPager viewPager) {
-		MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
-		adapter.addFragment(new StartDetectingFragment(), getString(R.string.Start_OCR));
-		adapter.addFragment(new NoteListFragment(), getString(R.string.all_notes));
-		viewPager.setAdapter(adapter);
 	}
 
 	@Override
@@ -130,32 +146,69 @@ public class MainActivity extends MvpAppCompatActivity implements NoteListView {
 	}
 
 	@Override
-	public void showProgress() {
-
+	public void start() {
+		getSupportFragmentManager().beginTransaction()
+				.replace(CONTAINER, mStartFragment, FRAGMENT_TAG)
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+				.commit();
 	}
 
 	@Override
-	public void hideProgress() {
-
+	public void setStartDetectingFragment() {
+		setFragment(mStartFragment);
 	}
 
 	@Override
-	public void disableList() {
-
+	public void setNoteListFragment() {
+		setFragment(mNoteListFragment);
 	}
 
 	@Override
-	public void enableList() {
-
+	public void setPrefsFragment() {
+		setFragment(mPrefsFragment);
 	}
 
 	@Override
-	public void setList(List<Note> noteList) {
-
+	public void setAboutFragment() {
+		setFragment(mAboutFragment);
 	}
 
 	@Override
-	public void showError(String message) {
+	public void openDrawer() {
+		mDrawerLayout.openDrawer(GravityCompat.START);
+	}
 
+	@Override
+	public void closeDrawer() {
+		mDrawerLayout.closeDrawers();
+	}
+
+	@Override
+	public void back() {
+		super.onBackPressed();
+	}
+
+	private void setFragment(Fragment fragment) {
+		Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+		if (!fragment.equals(fragmentByTag)) {
+			getSupportFragmentManager().beginTransaction()
+					.replace(CONTAINER, fragment, FRAGMENT_TAG)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.addToBackStack(null)
+					.commit();
+		}
+	}
+
+	private void doOnBackStackChanged() {
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+		if (fragment instanceof StartDetectingFragment) {
+			mNavigationView.setCheckedItem(R.id.nav_start_detecting);
+		} else if (fragment instanceof NoteListFragment) {
+			mNavigationView.setCheckedItem(R.id.nav_note_list);
+		} else if (fragment instanceof PrefsFragment) {
+			mNavigationView.setCheckedItem(R.id.nav_note_prefs);
+		} else {
+			mNavigationView.setCheckedItem(R.id.nav_about);
+		}
 	}
 }

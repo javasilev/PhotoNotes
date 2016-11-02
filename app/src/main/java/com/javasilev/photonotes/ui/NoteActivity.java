@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -37,6 +38,12 @@ public class NoteActivity extends AppCompatActivity {
 
 		setSupportActionBar(mActionBar);
 		setTitle(getString(R.string.edit_note));
+
+		mActionBar.setNavigationOnClickListener(view -> NoteActivity.super.onBackPressed());
+
+		final ActionBar ab = getSupportActionBar();
+		assert ab != null;
+		ab.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.PresenterType;
 import com.javasilev.photonotes.R;
 import com.javasilev.photonotes.adapters.NoteAdapter;
 import com.javasilev.photonotes.adapters.base.CollectionAdapter;
@@ -31,8 +30,6 @@ import butterknife.ButterKnife;
  */
 
 public class NoteListFragment extends MvpAppCompatFragment implements NoteListView, CollectionAdapter.OnItemClickListener<Note> {
-	public static final String NOTE_LIST_PRESENTER_TAG = "NoteListPresenterTag";
-
 	@BindView(R.id.fragment_list_progress_bar_loading)
 	ProgressBar mLoadingBar;
 
@@ -45,7 +42,7 @@ public class NoteListFragment extends MvpAppCompatFragment implements NoteListVi
 	@BindView(R.id.fragment_list_text_view_empty)
 	TextView mEmptyText;
 
-	@InjectPresenter(type = PresenterType.GLOBAL, tag = NOTE_LIST_PRESENTER_TAG)
+	@InjectPresenter()
 	NoteListPresenter mPresenter;
 
 	private NoteAdapter mAdapter;
@@ -133,5 +130,13 @@ public class NoteListFragment extends MvpAppCompatFragment implements NoteListVi
 
 	public NoteListPresenter getPresenter() {
 		return mPresenter;
+	}
+
+	public void findNotes(String query) {
+		mPresenter.findNotes(query);
+	}
+
+	public void loadNotes() {
+		mPresenter.loadNotes();
 	}
 }

@@ -1,72 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/activity_main"
+<android.support.v4.widget.DrawerLayout
+	android:id="@+id/activity_main_drawer"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	
-	<android.support.design.widget.AppBarLayout
-		android:id="@+id/activity_main_appbar"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-		<android.support.v7.widget.Toolbar
-			android:id="@+id/activity_main_toolbar"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="?attr/colorPrimary"
-			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-			app:layout_scrollFlags="scroll|enterAlways|snap"/>
-
-		<android.support.design.widget.TabLayout
-			android:id="@+id/activity_main_tabs"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"/>
-
-	</android.support.design.widget.AppBarLayout>
-
-	<android.support.v4.view.ViewPager
-		android:id="@+id/activity_main_viewpager"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
 	
 	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
 		android:orientation="vertical">
-		
-		<ProgressBar
-			android:id="@+id/activity_main_progress_bar_loading"
-			android:layout_width="wrap_content"
+
+		<android.support.design.widget.AppBarLayout
+			android:id="@+id/activity_main_appbar"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:indeterminate="true"
-			android:visibility="gone"
-			tools:visibility="visible" />
-		
-		<TextView
-			android:id="@+id/activity_main_text_view_progress"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/tiny"
-			android:textColor="@android:color/black"
-			android:textSize="18sp"
-			android:visibility="gone"
-			tools:text="@string/processing"
-			tools:visibility="visible" />
-		
-		<Button
-			android:id="@+id/activity_main_button_cancel_loading"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:background="@color/colorPrimary"
-			android:text="@string/cancel"
-			android:visibility="gone"
-			tools:visibility="visible" />
+			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/activity_main_toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="?attr/colorPrimary"
+				app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+				app:layout_scrollFlags="scroll|enterAlways|snap" />
+
+		</android.support.design.widget.AppBarLayout>
+
+		<FrameLayout
+			android:id="@+id/activity_main_frame_layout_container"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
 	</LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+
+	<android.support.design.widget.NavigationView
+		android:id="@+id/activity_main_navigation_view"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		android:fitsSystemWindows="true"
+		app:headerLayout="@layout/nav_header"
+		app:menu="@menu/drawer_view" />
+</android.support.v4.widget.DrawerLayout>

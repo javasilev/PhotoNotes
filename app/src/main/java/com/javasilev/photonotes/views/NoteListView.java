@@ -15,9 +15,11 @@ import com.javasilev.photonotes.models.Note;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface NoteListView extends MvpView {
 	void showProgress();
+
 	void hideProgress();
 
 	void disableList();
+
 	void enableList();
 
 	void setList(List<Note> noteList);

@@ -2,11 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.javasilev.photonotes"
         minSdkVersion 16
@@ -46,6 +45,8 @@ dependencies {
     compile "com.android.support:support-vector-drawable:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
 
+    compile 'com.takisoft.fix:preference-v7:25.0.0.0'
+
     /* utils */
     compile "com.squareup.picasso:picasso:$PICASSO_VERSION"
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
@@ -72,10 +73,6 @@ dependencies {
     compile "com.arello-mobile:moxy-app-compat:$MOXY_VERSION"
     provided "com.arello-mobile:moxy-compiler:$MOXY_VERSION"
     compile "com.arello-mobile:moxy-android:$MOXY_VERSION"
-
-    /* Play services */
-    //noinspection GradleDependency
-    compile 'com.google.android.gms:play-services-auth:9.0.0'
 
     /* Tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<MultiSelectListPreference
-		android:key="@string/key_lang"
-		android:title="@string/languages"
-		android:summary="@string/lang_summary"
-		android:entries="@array/lang_entries"
-		android:entryValues="@array/lang_values"
-		android:defaultValue="@array/lang_defaults"/>
+		<MultiSelectListPreference
+			android:key="@string/key_lang"
+			android:title="@string/languages"
+			android:dialogTitle="@string/select_languages"
+			android:summary="@string/lang_summary"
+			android:entries="@array/lang_entries"
+			android:entryValues="@array/lang_values"
+			android:defaultValue="@array/lang_defaults" />
 
-	<EditTextPreference
-		android:key="@string/key_api"
-		android:title="@string/enter_key_api"
-		android:summary="@string/key_api_summary"
-		android:inputType="textPassword" />
 </PreferenceScreen>

@@ -9,5 +9,7 @@
 
 		<item name="android:typeface">sans</item>
 
+		<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
 	</style>
 </resources>

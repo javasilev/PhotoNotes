@@ -8,14 +8,4 @@
 		android:icon="@drawable/ic_search_black_24dp"
 		app:showAsAction="ifRoom|collapseActionView"
 		app:actionViewClass="android.support.v7.widget.SearchView" />
-
-	<item
-		android:id="@+id/activity_main_menu_prefs"
-		android:title="@string/preferences"
-		app:showAsAction="never"/>
-
-	<item
-		android:id="@+id/activity_main_menu_about"
-		android:title="@string/about"
-		app:showAsAction="never"/>
 </menu>
