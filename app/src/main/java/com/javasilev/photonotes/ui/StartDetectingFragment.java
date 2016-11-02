@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -58,6 +57,9 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 	@BindView(R.id.fragment_start_detecting_button_gallery)
 	Button mGalleryButton;
 
+	private AlertDialog mProgressDialog;
+	private AlertDialog mErrorDialog;
+
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +73,23 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 
 		mCameraButton.setOnClickListener(v -> mStartDetectingPresenter.userClickControl(v.getId()));
 		mGalleryButton.setOnClickListener(v -> mStartDetectingPresenter.userClickControl(v.getId()));
+
+		mProgressDialog = new AlertDialog.Builder(getContext())
+				.setCancelable(false)
+				.setView(R.layout.fragment_progress_alert)
+				.setPositiveButton(getString(R.string.cancel), (dialog, which) -> onCancelClick())
+				.create();
+
+		mErrorDialog = new AlertDialog.Builder(getContext())
+				.setCancelable(true)
+				.setTitle(getString(R.string.error))
+				.setPositiveButton(getString(R.string.ok), (dialog, which) -> mStartDetectingPresenter.hideError())
+				.create();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
 	}
 
 	@Override
@@ -101,26 +120,27 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 
 	@Override
 	public void showProgress() {
-		ProgressAlertFragment alertFragment = ProgressAlertFragment.newInstance(this);
-		alertFragment.show(getFragmentManager(), ALERT_TAG);
+		mProgressDialog.show();
 	}
 
 	@Override
 	public void hideProgress() {
-		DialogFragment fragment = (DialogFragment) getFragmentManager().findFragmentByTag(ALERT_TAG);
-		if (fragment != null) {
-			fragment.dismiss();
+		if (mProgressDialog.isShowing()) {
+			mProgressDialog.dismiss();
 		}
 	}
 
 	@Override
 	public void showError(String errorMessage) {
-		new AlertDialog.Builder(getContext())
-				.setCancelable(true)
-				.setTitle(getString(R.string.error))
-				.setMessage(errorMessage)
-				.setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
-				.show();
+		mErrorDialog.setMessage(errorMessage);
+		mErrorDialog.show();
+	}
+
+	@Override
+	public void hideError() {
+		if (mErrorDialog.isShowing()) {
+			mErrorDialog.dismiss();
+		}
 	}
 
 	@Override
@@ -175,5 +195,21 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 	private File getCameraFile() {
 		File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		return new File(dir, FILE_NAME);
+	}
+
+	public AlertDialog getProgressDialog() {
+		return mProgressDialog;
+	}
+
+	public AlertDialog getErrorDialog() {
+		return mErrorDialog;
+	}
+
+	public void setProgressDialog(AlertDialog progressDialog) {
+		mProgressDialog = progressDialog;
+	}
+
+	public void setErrorDialog(AlertDialog errorDialog) {
+		mErrorDialog = errorDialog;
 	}
 }

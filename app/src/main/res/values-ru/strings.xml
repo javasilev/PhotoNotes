@@ -21,7 +21,7 @@
 	<string name="save">Сохранить</string>
 	<string name="saved_notes">Сохраненные заметки</string>
 	<string name="languages">Языки распознавания</string>
-	<string name="about">О программе</string>
+	<string name="about">О приложении</string>
 	<string name="select_languages">Выберите языки</string>
 	<string name="enter_key_api">Введите ключ API</string>
 	<string name="key_api_summary">Ваш персональный ключ для использования Google Cloud Vision API (обязателен)</string>

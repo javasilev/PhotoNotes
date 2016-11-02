@@ -109,4 +109,8 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 			mVisionController.stop();
 		}
 	}
+
+	public void hideError() {
+		getViewState().hideError();
+	}
 }

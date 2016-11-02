@@ -13,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -135,11 +136,30 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mStartFragment != null) {
+			AlertDialog progress = mStartFragment.getProgressDialog();
+			AlertDialog error = mStartFragment.getErrorDialog();
+
+			if (progress != null && progress.isShowing()) {
+				progress.dismiss();
+				mStartFragment.setProgressDialog(null);
+			}
+
+			if (error != null && error.isShowing()) {
+				error.dismiss();
+				mStartFragment.setErrorDialog(null);
+			}
+		}
+	}
+
+	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();
-		if (fragments != null) {
-			for (Fragment fragment : fragments) {
+		for (Fragment fragment : fragments) {
+			if (fragment != null) {
 				fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
 			}
 		}

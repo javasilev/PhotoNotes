@@ -11,5 +11,7 @@
 
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
+		<item name="android:dialogTheme">@style/Theme.AppCompat.Dialog.Alert</item>
+
 	</style>
 </resources>

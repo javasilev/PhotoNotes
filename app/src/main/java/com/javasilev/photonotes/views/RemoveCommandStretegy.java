@@ -13,7 +13,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategy;
  * Created by Aleksei Vasilev.
  */
 
-class RemoveCommandStretegy implements StateStrategy {
+@SuppressWarnings("WeakerAccess")
+public class RemoveCommandStretegy implements StateStrategy {
 	@Override
 	public <View extends MvpView> void beforeApply(List<ViewCommand<View>> list, ViewCommand<View> nextCommand) {
 		Iterator<ViewCommand<View>> iterator = list.iterator();
