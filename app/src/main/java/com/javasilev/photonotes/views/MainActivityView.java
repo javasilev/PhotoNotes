@@ -8,26 +8,36 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
  * Created by Aleksei Vasilev.
  */
 
-
 public interface MainActivityView extends MvpView {
 
-	String REMOVE_COMMAND_TAG = "REMOVE_COMMAND_TAG";
+	String REMOVE_PREFIX_TAG = "REMOVE";
+	String REMOVE_START_DETECTING_TAG = "REMOVE_START_DETECTING_TAG";
+	String REMOVE_NOTE_LIST_TAG = "REMOVE_NOTE_LIST_TAG";
+	String REMOVE_PREFS_TAG = "REMOVE_PREFS_TAG";
+	String REMOVE_ABOUT_TAG = "REMOVE_ABOUT_TAG";
+	String CLOSE_DRAWER_TAG = "CLOSE_DRAWER_TAG";
+	String CLOSE_PREFIX_TAG = "CLOSE";
 
 	void start();
 
-	void setStartDetectingFragment();
+	@StateStrategyType(value = NoRepeatLastCommandStrategy.class, tag = REMOVE_START_DETECTING_TAG)
+	void openStartDetectingScreen();
 
-	void setNoteListFragment();
+	@StateStrategyType(value = NoRepeatLastCommandStrategy.class, tag = REMOVE_NOTE_LIST_TAG)
+	void openNoteListScreen();
 
-	void setPrefsFragment();
+	@StateStrategyType(value = NoRepeatLastCommandStrategy.class, tag = REMOVE_PREFS_TAG)
+	void openPrefsScreen();
 
-	void setAboutFragment();
+	@StateStrategyType(value = NoRepeatLastCommandStrategy.class, tag = REMOVE_ABOUT_TAG)
+	void openAboutScreen();
 
-	@StateStrategyType(value = AddToEndSingleStrategy.class, tag = REMOVE_COMMAND_TAG)
+	@StateStrategyType(value = AddToEndSingleStrategy.class, tag = CLOSE_DRAWER_TAG)
 	void openDrawer();
 
-	@StateStrategyType(value = RemoveCommandStretegy.class, tag = REMOVE_COMMAND_TAG)
+	@StateStrategyType(value = RemoveCommandStretegy.class, tag = CLOSE_PREFIX_TAG)
 	void closeDrawer();
 
+	@StateStrategyType(value = RemoveCommandStretegy.class, tag = REMOVE_PREFIX_TAG)
 	void back();
 }

@@ -59,7 +59,6 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 
 	@Override
 	public void onCompleted() {
-		getViewState().hideProgress();
 	}
 
 	@Override
@@ -79,6 +78,7 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 
 	@Override
 	public void onNext(List<Response> responses) {
+		getViewState().hideProgress();
 		if (responses != null && responses.size() > 0) {
 			Response response = responses.get(0);
 			Error error = response.getError();
@@ -108,9 +108,5 @@ public class StartDetectingPresenter extends MvpPresenter<StartDetectingView> im
 		if (mVisionController != null) {
 			mVisionController.stop();
 		}
-	}
-
-	public void hideError() {
-		getViewState().hideError();
 	}
 }

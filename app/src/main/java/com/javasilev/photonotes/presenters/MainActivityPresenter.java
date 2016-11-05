@@ -27,19 +27,19 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> implem
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.nav_start_detecting:
-				getViewState().setStartDetectingFragment();
+				getViewState().openStartDetectingScreen();
 				getViewState().closeDrawer();
 				return true;
 			case R.id.nav_note_list:
-				setNoteListFragment();
+				openNoteListScreen();
 				getViewState().closeDrawer();
 				return true;
 			case R.id.nav_note_prefs:
-				getViewState().setPrefsFragment();
+				getViewState().openPrefsScreen();
 				getViewState().closeDrawer();
 				return true;
 			case R.id.nav_about:
-				getViewState().setAboutFragment();
+				getViewState().openAboutScreen();
 				getViewState().closeDrawer();
 				return true;
 		}
@@ -59,8 +59,8 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> implem
 		getViewState().back();
 	}
 
-	public void setNoteListFragment() {
-		getViewState().setNoteListFragment();
+	public void openNoteListScreen() {
+		getViewState().openNoteListScreen();
 	}
 
 	private void start() {

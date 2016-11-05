@@ -17,14 +17,13 @@ public interface StartDetectingView extends MvpView {
 	@StateStrategyType(SkipStrategy.class)
 	void startGallery();
 
+//	@StateStrategyType(SkipStrategy.class)
 	void showProgress();
 	void hideProgress();
 
+	@StateStrategyType(SkipStrategy.class)
 	void showError(String errorMessage);
-	void hideError();
 
-//	@StateStrategyType(SkipStrategy.class)
+	@StateStrategyType(SkipStrategy.class)
 	void processResult(long itemId);
-
-	void onCancelClick();
 }

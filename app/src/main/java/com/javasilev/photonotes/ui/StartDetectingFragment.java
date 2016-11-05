@@ -25,6 +25,7 @@ import android.widget.Button;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 import com.javasilev.photonotes.R;
 import com.javasilev.photonotes.presenters.StartDetectingPresenter;
 import com.javasilev.photonotes.utils.PermissionUtils;
@@ -35,6 +36,7 @@ import butterknife.ButterKnife;
 
 
 import static android.app.Activity.RESULT_OK;
+import static com.javasilev.photonotes.R.string.error;
 
 /**
  * Created by Aleksei Vasilev.
@@ -42,13 +44,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class StartDetectingFragment extends MvpAppCompatFragment implements StartDetectingView {
 	public static final String FILE_NAME = "temp.jpg";
-	public static final String ALERT_TAG = "alert_tag";
+	public static final String PRESENTER_TAG = "presenter_tag";
 
 	public static final int GALLERY_REQUEST = 1;
 	public static final int CAMERA_PERMISSIONS_REQUEST = 2;
 	public static final int CAMERA_REQUEST = 3;
 
-	@InjectPresenter
+	@InjectPresenter(type = PresenterType.GLOBAL, tag = PRESENTER_TAG)
 	StartDetectingPresenter mStartDetectingPresenter;
 
 	@BindView(R.id.fragment_start_detecting_button_camera)
@@ -77,19 +79,28 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 		mProgressDialog = new AlertDialog.Builder(getContext())
 				.setCancelable(false)
 				.setView(R.layout.fragment_progress_alert)
-				.setPositiveButton(getString(R.string.cancel), (dialog, which) -> onCancelClick())
+				.setPositiveButton(getString(R.string.cancel), (dialog, which) -> mStartDetectingPresenter.userCancelDetecting())
 				.create();
 
 		mErrorDialog = new AlertDialog.Builder(getContext())
 				.setCancelable(true)
-				.setTitle(getString(R.string.error))
-				.setPositiveButton(getString(R.string.ok), (dialog, which) -> mStartDetectingPresenter.hideError())
+				.setTitle(getString(error))
+				.setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
 				.create();
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
+			mProgressDialog.dismiss();
+			mProgressDialog = null;
+		}
+
+		if (mErrorDialog != null && mErrorDialog.isShowing()) {
+			mErrorDialog.dismiss();
+			mErrorDialog = null;
+		}
 	}
 
 	@Override
@@ -137,22 +148,10 @@ public class StartDetectingFragment extends MvpAppCompatFragment implements Star
 	}
 
 	@Override
-	public void hideError() {
-		if (mErrorDialog.isShowing()) {
-			mErrorDialog.dismiss();
-		}
-	}
-
-	@Override
 	public void processResult(long itemId) {
 		Intent intent = new Intent(getContext(), NoteActivity.class);
 		intent.putExtra(NoteActivity.EXTRA_NOTE_ID, itemId);
 		startActivity(intent);
-	}
-
-	@Override
-	public void onCancelClick() {
-		mStartDetectingPresenter.userCancelDetecting();
 	}
 
 	@Override

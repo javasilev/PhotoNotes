@@ -13,9 +13,9 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +32,9 @@ import butterknife.ButterKnife;
 public class MainActivity extends MvpAppCompatActivity implements MainActivityView {
 	public static final int CONTAINER = R.id.activity_main_frame_layout_container;
 	private static final String TAG = "PN_MainActivity";
-	private static final String FRAGMENT_TAG = "fragmrnt";
+	private static final String FRAGMENT_TAG = "fragment";
+	private static final String SEARCH_QUERY = "search_query";
+	private static final String IS_EXPANDED = "is_expanded";
 
 	@BindView(R.id.activity_main_toolbar)
 	Toolbar mToolbar;
@@ -46,16 +48,27 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 	@InjectPresenter
 	MainActivityPresenter mPresenter;
 
+	private SearchView mSearchView;
+	private MenuItem mSearchItem;
+	private String mQueryString;
+	private boolean mIsExpanded;
+
 	private StartDetectingFragment mStartFragment = new StartDetectingFragment();
 	private NoteListFragment mNoteListFragment = new NoteListFragment();
 	private PrefsFragment mPrefsFragment = new PrefsFragment();
 	private AboutFragment mAboutFragment = new AboutFragment();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
+
+		if (savedInstanceState != null) {
+			mQueryString = savedInstanceState.getString(SEARCH_QUERY);
+			mIsExpanded = savedInstanceState.getBoolean(IS_EXPANDED);
+		}
 
 		mNoteListFragment.onCreate(null);
 
@@ -95,12 +108,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 
-		final MenuItem searchItem = menu.findItem(R.id.activity_main_menu_action_search);
-		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+		mSearchItem = menu.findItem(R.id.activity_main_menu_action_search);
+		mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
 
-		searchView.setOnSearchClickListener(v -> mPresenter.setNoteListFragment());
+		mSearchView.setOnSearchClickListener(v -> mPresenter.openNoteListScreen());
 
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				find(query);
@@ -118,12 +131,27 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 			}
 		});
 
-		searchView.setOnCloseListener(() -> {
+		mSearchView.setOnCloseListener(() -> {
 			mNoteListFragment.loadNotes();
 			return false;
 		});
 
+		if (mIsExpanded) {
+			mSearchItem.expandActionView();
+			if (!TextUtils.isEmpty(mQueryString)) {
+				mSearchView.setQuery(mQueryString, true);
+				mSearchView.clearFocus();
+			}
+		}
+
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(SEARCH_QUERY, mSearchView.getQuery().toString());
+		outState.putBoolean(IS_EXPANDED, mSearchItem.isActionViewExpanded());
 	}
 
 	@Override
@@ -132,25 +160,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 			mPresenter.closeDrawer();
 		} else {
 			mPresenter.back();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (mStartFragment != null) {
-			AlertDialog progress = mStartFragment.getProgressDialog();
-			AlertDialog error = mStartFragment.getErrorDialog();
-
-			if (progress != null && progress.isShowing()) {
-				progress.dismiss();
-				mStartFragment.setProgressDialog(null);
-			}
-
-			if (error != null && error.isShowing()) {
-				error.dismiss();
-				mStartFragment.setErrorDialog(null);
-			}
 		}
 	}
 
@@ -174,22 +183,22 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 	}
 
 	@Override
-	public void setStartDetectingFragment() {
+	public void openStartDetectingScreen() {
 		setFragment(mStartFragment);
 	}
 
 	@Override
-	public void setNoteListFragment() {
+	public void openNoteListScreen() {
 		setFragment(mNoteListFragment);
 	}
 
 	@Override
-	public void setPrefsFragment() {
+	public void openPrefsScreen() {
 		setFragment(mPrefsFragment);
 	}
 
 	@Override
-	public void setAboutFragment() {
+	public void openAboutScreen() {
 		setFragment(mAboutFragment);
 	}
 

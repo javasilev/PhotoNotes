@@ -1,7 +1,8 @@
 package com.javasilev.photonotes.views;
 
-import java.util.Iterator;
 import java.util.List;
+
+import android.text.TextUtils;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.ViewCommand;
@@ -11,22 +12,18 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategy;
  * Created by Aleksei Vasilev.
  */
 
-@SuppressWarnings("WeakerAccess")
-public class RemoveCommandStretegy implements StateStrategy {
+public class NoRepeatLastCommandStrategy implements StateStrategy {
 	@Override
 	public <View extends MvpView> void beforeApply(List<ViewCommand<View>> list, ViewCommand<View> nextCommand) {
-		Iterator<ViewCommand<View>> iterator = list.iterator();
-		while (iterator.hasNext()) {
-			ViewCommand<View> command = iterator.next();
-			if (command.getTag().contains(nextCommand.getTag())) {
-				iterator.remove();
+		int size = list.size();
+		if (size > 0) {
+			if (!TextUtils.equals(list.get(size - 1).getTag(), nextCommand.getTag())) {
+				list.add(nextCommand);
 			}
 		}
-		list.add(nextCommand);
 	}
 
 	@Override
 	public <View extends MvpView> void afterApply(List<ViewCommand<View>> list, ViewCommand<View> viewCommand) {
-		list.remove(viewCommand);
 	}
 }
