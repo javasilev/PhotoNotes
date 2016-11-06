@@ -27,20 +27,20 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> implem
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.nav_start_detecting:
-				getViewState().openStartDetectingScreen();
 				getViewState().closeDrawer();
+				getViewState().openStartDetectingScreen();
 				return true;
 			case R.id.nav_note_list:
-				openNoteListScreen();
 				getViewState().closeDrawer();
+				openNoteListScreen();
 				return true;
 			case R.id.nav_note_prefs:
-				getViewState().openPrefsScreen();
 				getViewState().closeDrawer();
+				getViewState().openPrefsScreen();
 				return true;
 			case R.id.nav_about:
-				getViewState().openAboutScreen();
 				getViewState().closeDrawer();
+				getViewState().openAboutScreen();
 				return true;
 		}
 
