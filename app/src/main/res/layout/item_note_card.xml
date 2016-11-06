@@ -5,8 +5,11 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_marginTop="1dp"
-	app:cardCornerRadius="0dp">
+	android:layout_marginBottom="@dimen/tiny"
+	android:layout_marginLeft="@dimen/minor"
+	android:layout_marginRight="@dimen/minor"
+	android:layout_marginTop="@dimen/tiny"
+	app:cardCornerRadius="2dp">
 
 	<com.daimajia.swipe.SwipeLayout
 		android:id="@+id/item_note_card_swipe"
@@ -50,6 +53,7 @@
 
 				<TextView
 					android:id="@+id/item_note_card_text_view_name"
+					fontPath="fonts/Roboto-Regular.ttf"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_marginRight="@dimen/minor"
@@ -57,9 +61,9 @@
 					android:gravity="center_vertical"
 					android:lines="1"
 					android:paddingTop="@dimen/minor"
+					android:textColor="@color/colorPrimaryDark"
 					android:textSize="18sp"
-					android:textStyle="bold"
-					tools:ignore="RtlHardcoded"
+					tools:ignore="MissingPrefix,RtlHardcoded"
 					tools:text="Note_name_15416511" />
 
 				<TextView
@@ -69,6 +73,7 @@
 					android:layout_marginLeft="@dimen/minor"
 					android:gravity="center_vertical"
 					android:paddingTop="@dimen/minor"
+					android:textColor="@color/colorPrimaryDark"
 					android:textSize="12sp"
 					tools:ignore="RtlHardcoded"
 					tools:text="21.01.2016" />
@@ -80,6 +85,7 @@
 				android:layout_height="wrap_content"
 				android:lines="4"
 				android:paddingTop="@dimen/tiny"
+				android:textColor="#424242"
 				android:textSize="14sp"
 				tools:text="List of languages to use for TEXT_DETECTION. In most cases, an empty value yields the best results since it enables automatic language detection." />
 		</LinearLayout>

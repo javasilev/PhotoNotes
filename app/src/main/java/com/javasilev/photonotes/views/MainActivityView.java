@@ -10,7 +10,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 public interface MainActivityView extends MvpView {
 
-	String REMOVE_PREFIX_TAG = "REMOVE";
 	String REMOVE_START_DETECTING_TAG = "REMOVE_START_DETECTING_TAG";
 	String REMOVE_NOTE_LIST_TAG = "REMOVE_NOTE_LIST_TAG";
 	String REMOVE_PREFS_TAG = "REMOVE_PREFS_TAG";
@@ -38,6 +37,5 @@ public interface MainActivityView extends MvpView {
 	@StateStrategyType(value = RemoveCommandStretegy.class, tag = CLOSE_PREFIX_TAG)
 	void closeDrawer();
 
-	@StateStrategyType(value = RemoveCommandStretegy.class, tag = REMOVE_PREFIX_TAG)
 	void back();
 }

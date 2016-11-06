@@ -17,7 +17,6 @@ public interface StartDetectingView extends MvpView {
 	@StateStrategyType(SkipStrategy.class)
 	void startGallery();
 
-//	@StateStrategyType(SkipStrategy.class)
 	void showProgress();
 	void hideProgress();
 

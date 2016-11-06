@@ -2,6 +2,7 @@ package com.javasilev.photonotes.ui;
 
 import java.util.List;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -28,6 +29,7 @@ import com.javasilev.photonotes.views.MainActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends MvpAppCompatActivity implements MainActivityView {
 	public static final int CONTAINER = R.id.activity_main_frame_layout_container;
@@ -57,7 +59,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 	private NoteListFragment mNoteListFragment = new NoteListFragment();
 	private PrefsFragment mPrefsFragment = new PrefsFragment();
 	private AboutFragment mAboutFragment = new AboutFragment();
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 		for (int i = 0; i < manager.getBackStackEntryCount(); i++) {
 			manager.popBackStack();
 		}
+	}
+
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 
 	@Override

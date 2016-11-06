@@ -32,6 +32,7 @@ import rx.schedulers.Schedulers;
 @SuppressWarnings("WeakerAccess")
 public class VisionController {
 	private static final String TAG = "PN_VisionContrlr";
+	private static final String FIELDS = "responses(error,textAnnotations)";
 
 	private Observer<List<Response>> mVisionObserver;
 	private Context mContext;
@@ -55,11 +56,9 @@ public class VisionController {
 		final Set<String> langHints = prefs.getStringSet(mContext.getString(R.string.key_lang), Collections.singleton("ru"));
 		final String apiKey = KeyManager.getKey();
 
-		final String fields = "responses(error,textAnnotations)";
-
 		mSubscription = Observable.fromCallable(() -> createRequest(uri, langHints))
 				.subscribeOn(Schedulers.io())
-				.flatMap(visionRequest -> VisionService.getInstance(mContext).createVisionClient().getVisionResponse(visionRequest, fields, apiKey))
+				.flatMap(visionRequest -> VisionService.getInstance(mContext).createVisionClient().getVisionResponse(visionRequest, FIELDS, apiKey))
 				.map(VisionResponse::getResponses)
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(mVisionObserver);

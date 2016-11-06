@@ -10,7 +10,7 @@ android {
         applicationId "com.javasilev.photonotes"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 4
+        versionCode 7
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -68,11 +68,18 @@ dependencies {
     compile "io.reactivex:rxjava:$RX_VERSION"
     compile "io.reactivex:rxandroid:$RX_VERSION"
 
+    compile "com.tbruyelle.rxpermissions:rxpermissions:0.8.0@aar"
+
+    compile "com.jakewharton.rxbinding:rxbinding:0.4.0"
+
     /* MVP */
     compile "com.arello-mobile:moxy:$MOXY_VERSION"
     compile "com.arello-mobile:moxy-app-compat:$MOXY_VERSION"
     provided "com.arello-mobile:moxy-compiler:$MOXY_VERSION"
     compile "com.arello-mobile:moxy-android:$MOXY_VERSION"
+
+    /* Calligraphy */
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
     /* Tests */
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -12,12 +12,16 @@
 
 		<EditText
 			android:id="@+id/fragment_note_edit_text_name"
+			fontPath="fonts/consola.ttf"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:hint="@string/name" />
+			android:hint="@string/name"
+			android:textColor="@color/colorPrimaryDark"
+			tools:ignore="MissingPrefix" />
 
 		<EditText
 			android:id="@+id/fragment_note_edit_text_content"
+			fontPath="fonts/consola.ttf"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			android:layout_weight="1"
@@ -25,7 +29,8 @@
 			android:gravity="left"
 			android:hint="@string/content"
 			android:linksClickable="true"
+			android:textColor="@color/colorPrimaryDark"
 			android:textSize="14sp"
-			tools:ignore="RtlHardcoded" />
+			tools:ignore="MissingPrefix,RtlHardcoded" />
 	</LinearLayout>
 </LinearLayout>

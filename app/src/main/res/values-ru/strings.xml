@@ -35,6 +35,9 @@
 	<string name="or">или</string>
 	<string name="choose_from_gallery">Выберите из галереи</string>
 	<string name="select">Выберите изображение</string>
+	<string name="close_drawer">Закрыть</string>
+	<string name="open_drawer">Открыть</string>
+	<string name="permissions_are_required">Необходимы разрешения</string>
 
 	<string-array name="lang_entries">
 		<item>Белорусский</item>
@@ -59,6 +62,4 @@
 		<item>uk</item>
 		<item>uz</item>
 	</string-array>
-	<string name="close_drawer">Закрыть</string>
-	<string name="open_drawer">Открыть</string>
 </resources>

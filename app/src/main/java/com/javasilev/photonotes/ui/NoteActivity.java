@@ -1,5 +1,6 @@
 package com.javasilev.photonotes.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import com.javasilev.photonotes.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by Aleksei Vasilev.
@@ -59,6 +61,11 @@ public class NoteActivity extends AppCompatActivity {
 				.replace(CONTAINER, mFragment)
 				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 				.commit();
+	}
+
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
 	}
 
 	@Override

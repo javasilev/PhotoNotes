@@ -42,6 +42,7 @@
 	<string name="open_drawer">open drawer</string>
 	<string name="close_drawer">close drawer</string>
 	<string name="select_languages">Select languages</string>
+	<string name="permissions_are_required">Permissions are required</string>
 
 	<string-array name="lang_entries">
 		<item>Belarusian</item>
