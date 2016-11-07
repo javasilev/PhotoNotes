@@ -165,7 +165,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 		if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
 			mPresenter.closeDrawer();
 		} else {
-			mPresenter.back();
+			if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG) instanceof StartDetectingFragment) {
+				finish();
+			} else {
+				mPresenter.back();
+			}
 		}
 	}
 
@@ -228,7 +232,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
 		if (!fragment.equals(fragmentByTag)) {
 			getSupportFragmentManager().beginTransaction()
 					.replace(CONTAINER, fragment, FRAGMENT_TAG)
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
 					.addToBackStack(null)
 					.commit();
 		}

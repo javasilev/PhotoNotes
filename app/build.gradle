@@ -10,7 +10,7 @@ android {
         applicationId "com.javasilev.photonotes"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 7
+        versionCode 9
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
